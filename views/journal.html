@@ -1,0 +1,76 @@
+<div>
+  <div class="container">
+    <div class="row center">
+      <div class="col s12 m12">
+        <br />
+        <h2 class="light secondTitleColor">Journal du projet</h2>
+        <br />
+      </div>
+    </div>
+    <br />
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m12">
+        <ul class="collection">
+          <li class="collection-item">
+            <h5>
+              <a class="journal" href="javascript:void(0)" onclick="deroulerJournal()">
+                8 Octobre 2018
+              </a>
+            </h5>
+          </li>
+          <div class="corpsJournal" id="seance-08-10-18">
+            <p> Points abordés :
+              <ul class="browser-default" style="list-style-type:disc">
+                <li>Le développement durable, qui doit être au coeur de ce projet</li>
+                <li>Les thèmatiques envisagées pour le projet</li>
+                <li>Les problèmatiques relevant du 'bâtiment intelligent' pour chaque thématique</li>
+              </ul>
+            </p>
+            <p> Détails de la séance :
+              <ol class="browser-default">
+                <li>Economie Energie à la maison</li>
+                  <ul class="browser-default" style="list-style-type:disc">
+                    <li> Détecteur de l'intensité lumineuse pour adapter l'éclairage et conserver la même luminosité </li>
+                    <li> Prise intelligente capable de se déconnecter du réseau électrique </li>
+                    <li> Détecteurs de présence / mouvement pour activer luminaires, prise intelligente, etc.</li>
+                  </ul>
+                  <br />
+                <li>Agriculture :</li>
+                  <ul class="browser-default" style="list-style-type:disc">
+                    <li> Détecteur de hauteur </li>
+                    <li> Aide à la plantation <em>(indiquer le meilleur moment en fonction de la météo)</em></li>
+                    <li> Calcul humidité du sol à corrélée avec la météo à venir </li>
+                    <li> Régulation de la température <em>(sous serre uniquement)</em> </li>
+                    <li> Allumer les lampes UV <em>(sous serre uniquement)</em> </li>
+                  </ul>
+                  <div style="padding-left: 3.5%">
+                  <p>En exterieur : la source d'énergie envisagée serait panneau solaire ou pile.</p>
+                  <p>En intérieur : aucune contrainte</p>
+                  <p>Une application mobile permettrait de prendre connaissance des états
+                    des capteurs ainsi que des recommendations sur la plantation.
+                    Il s'agirait également de pouvoir paramétrer le système (type de plante, très ou peu économe en eau, etc.)</p>
+                  <p>La centrale de traitement communiquerait avec les capteurs par ondes radio via le protocole
+                    <a href="javascript:void(0);" onclick="popUp('Page wikipedia LoRaWAN :', 'https://fr.wikipedia.org/wiki/LoRaWAN',
+                    'Information complémentaire :', 'http://iot-strasbourg.strataggem.com/lora-lorawan.html')">
+                      LoRaWAN
+                    </a>.
+                    A la reception des données, la centrale effectuerait les calculs en adéquation avec
+                    les parametres saisis par l'utilisateur sur l'appli. Puis enverait si besoin
+                    des commandes de contrôle aux dispositifs sur le terrain (vannes d'eau connectées,
+                    lampes UV, ouverture de la serre, etc.)</p>
+                  </div>
+              </ol>
+            </p>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <br />
+  </div>
+
+  <script language="javascript" src="js/journal.js"></script>
+</div>
