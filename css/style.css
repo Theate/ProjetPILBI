@@ -93,7 +93,7 @@ border-bottom-right-radius:15px;
   border-radius: 3px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.5);
   border: none;
-  font-size: 17px;
+  font-size: 15px;
   text-align: center;
   cursor : pointer;
 }
@@ -122,6 +122,7 @@ border-bottom-right-radius:15px;
 .corpsJournal {
   padding-left: 3.5%;
   padding-right: 3.5%;
+  border-bottom: 1px outset rgba(150,150,150,0.2);
 }
 
 /******************
