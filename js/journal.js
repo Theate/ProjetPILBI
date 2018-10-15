@@ -1,10 +1,10 @@
 console.log("Journal");
-function deroulerJournal() {
-  if (document.getElementById("seance-08-10-18").style.display === "block") {
-    document.getElementById("seance-08-10-18").style.display = "none";
+function deroulerJournal(myId) {
+  if (document.getElementById(myId).style.display === "block") {
+    document.getElementById(myId).style.display = "none";
   }
   else {
-    document.getElementById("seance-08-10-18").style.display = "block";
+    document.getElementById(myId).style.display = "block";
   }
 }
 
