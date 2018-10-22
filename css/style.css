@@ -43,7 +43,7 @@
   /* background-color: rgb(130, 130, 130, 0.2); */
 }
 
-.titleIntro {
+/* .titleIntro {
   text-align: center;
 }
 
@@ -54,7 +54,7 @@
   padding-right: 3%;
   color: rgba(0,0,0,1);
   font: 15px sans-serif;
-}
+} */
 
 .tuile {
 text-align: center;
@@ -71,6 +71,7 @@ border-bottom-right-radius:15px;
   width: 60%;
   margin: 0 auto;
   text-align: center;
+  font-size: 30px;
 }
 
 .bodyTuile {
@@ -136,5 +137,9 @@ border-bottom-right-radius:15px;
 }
 
 #seance-15-10-18 {
+  display: none;
+}
+
+#seance-22-10-18 {
   display: none;
 }
