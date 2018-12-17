@@ -1,0 +1,169 @@
+/**************
+*
+* Mise en Page
+*
+****************/
+
+.bandeauColor {
+  background-color: rgba(200,140,0,0.7);
+}
+
+.bandeauIntro {
+  width: 33%;
+  border-left: 1px outset rgba(0,115,155,0.1);
+  border-right: 1px outset rgba(0,115,155,0.1);
+}
+
+.bandeauIntro:hover {
+  background-color: rgba(160,115,0,0.2);
+}
+
+.mainTitleColor {
+  color: rgba(36,45,45,0.8);
+}
+
+.secondTitleColor {
+  color: rgba(200,140,0,0.7);
+}
+
+.footer {
+  background-color: rgba(36,45,45,0.8);
+}
+
+.introduction {
+  margin: 0 auto;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 20px;
+  border-bottom: 3px outset rgba(130,130,130,0.4);
+  border-right: 3px outset rgba(130,130,130,0.4);
+  border-top: 2px outset rgba(130,130,130,0.3);
+  border-left: 2px outset rgba(130,130,130,0.3);
+  width: 100%;
+  /* background-color: rgb(130, 130, 130, 0.2); */
+}
+
+/* .titleIntro {
+  text-align: center;
+}
+
+.corpsIntro {
+  padding-bottom: 1%;
+  text-align: left;
+  padding-left: 3%;
+  padding-right: 3%;
+  color: rgba(0,0,0,1);
+  font: 15px sans-serif;
+} */
+
+.tuile {
+text-align: center;
+margin: 0 auto;
+background-color: rgba(200,200,200,0.2);
+padding-top:2%;
+border-top-left-radius:15px;
+border-top-right-radius:15px;
+border-bottom-left-radius:15px;
+border-bottom-right-radius:15px;
+}
+
+.headTuile {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 30px;
+}
+
+.bodyTuile {
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+  padding-top: 1%;
+  border-radius: 15px;
+  width: 72%;
+  margin: 0 auto;
+  color: rgba(0,0,0,1);
+  background-color: rgba(210,210,210,0.4);
+  font: 14px sans-serif;
+}
+
+.bouton {
+  color: white;
+  background-color: rgba(200,140,0,0.7);
+  text-transform: uppercase;
+  border-radius: 3px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  border: none;
+  font-size: 15px;
+  text-align: center;
+  cursor : pointer;
+}
+
+.bouton:hover {
+  box-shadow: 1px 6px 15px rgba(0,0,0,0.5);
+}
+
+.graphique {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border: 2px outset rgba(130,130,130,0.4);
+  padding-top: 2%;
+}
+
+.oversize {
+  width: 100%;
+}
+
+.journal {
+  color: black;
+}
+
+.corpsJournal {
+  padding-left: 3.5%;
+  padding-right: 3.5%;
+  border-bottom: 1px outset rgba(150,150,150,0.2);
+}
+
+/******************
+*
+* interactivité JS
+*
+*******************/
+
+#seance-08-10-18 {
+  display: none;
+}
+
+#seance-15-10-18 {
+  display: none;
+}
+
+#seance-22-10-18 {
+  display: none;
+}
+
+#seance-05-11-18 {
+  display: none;
+}
+
+#seance-20-11-18 {
+  display: none;
+}
+
+#seance-26-11-18 {
+  display: none;
+}
+
+#seance-03-12-18 {
+  display: none;
+}
+
+#seance-10-12-18 {
+  display: none;
+}
+
+#seance-17-12-18 {
+  display: none;
+}
