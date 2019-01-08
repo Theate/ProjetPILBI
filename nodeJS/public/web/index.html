@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<head>
+<title>SmartKoulak</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="test.css">
+<link rel="stylesheet" href="css/test.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
 <body class="w3-light-grey">
 
 <!-- Top container -->
@@ -47,6 +50,31 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-remove fa-fw"></i>  Déconnexion</a><br><br>
   </div>
 </nav>
+
+<!-- pop up Settings -->
+<div class="hover_bkgr_fricc">
+    <span class="helper"></span>
+    <div>
+        <div class="popupCloseButton">X</div>
+        <header class="w3-container">
+          <h5><b><i class="fa fa-cog fa-fw"></i> Settings</b></h5>
+        </header>
+        <div>
+          <form action="post.html" method="post">
+            <fieldset>
+              <legend>Personal information:</legend>
+              Pseudonym:
+              <input type="text" name="pseudo" value="">
+              <br />
+              Email:
+              <input type="text" name="email" value="">
+              <br /><br />
+              <input type="submit" value="Submit">
+            </fieldset>
+          </form>
+        </div>
+    </div>
+</div>
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
@@ -102,22 +130,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
   </div>
 
-  <!-- test pop up formulaire -->
-  <div class="hover_bkgr_fricc">
-      <span class="helper"></span>
-      <div>
-          <div class="popupCloseButton">X</div>
-          <p>Test de la pop up<br />
-            Alors ?!!
-          </p>
-      </div>
-  </div>
-
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">
       <div class="w3-third">
         <h5>Regions</h5>
-        <img src="/w3images/region.jpg" style="width:100%" alt="Google Regional Map">
+        <img src="/images/region.jpg" style="width:100%" alt="Google Regional Map">
       </div>
       <div class="w3-twothird">
         <h5>Feeds</h5>
@@ -216,15 +233,15 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <h5>Recent Users</h5>
     <ul class="w3-ul w3-card-4 w3-white">
       <li class="w3-padding-16">
-        <img src="/w3images/avatar2.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
+        <img src="/images/avatar2.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
         <span class="w3-xlarge">Mike</span><br>
       </li>
       <li class="w3-padding-16">
-        <img src="/w3images/avatar5.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
+        <img src="/images/avatar5.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
         <span class="w3-xlarge">Jill</span><br>
       </li>
       <li class="w3-padding-16">
-        <img src="/w3images/avatar6.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
+        <img src="/images/avatar6.png" class="w3-left w3-circle w3-margin-right" style="width:35px">
         <span class="w3-xlarge">Jane</span><br>
       </li>
     </ul>
@@ -265,7 +282,6 @@ function w3_close() {
   overlayBg.style.display = "none";
 }
 </script>
-<script type="text/javascript" src="test.js"></script>
-
+<script type="text/javascript" src="js/test.js"></script>
 </body>
 </html>
