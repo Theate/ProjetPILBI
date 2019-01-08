@@ -1,47 +1,30 @@
 var http = require('http'); // Import Node.js core module
+var express = require('express');
 var fs = require('fs');
+var path = require('path');
 
 /****************************************
   Gestion de l'affichage des pages web
 *****************************************/
-var response;
-function handleRequest(err, data){
-  if (err) {
-      throw err;
-  }
-  response.writeHead(200, { 'Content-Type': 'text/html' });
-  response.write(data);
-  response.end();
-}
+var app = express();
+app.use(express.static(path.join(__dirname, 'public')));
 
 /****************************************************
   Création du serveur web et Gestion des requetes
 *****************************************************/
-var server = http.createServer(function (req, res) {
+var server = http.createServer(app);
 
-    //check the URL of the current request
-    if (req.url == '/') {
-      response = res
-      fs.readFile('web/index.html', handleRequest);
-    }
-    else if (req.url == "/student") {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write('<html><body><p>This is student Page.</p></body></html>');
-        res.end();
-    }
-    else if (req.url == "/admin") {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write('<html><body><p>This is admin Page.</p></body></html>');
-        res.end();
-    }
-    else
-        res.end('Invalid Request!');
+/****************************************
+  Gestion de l'affichage des pages web
+*****************************************/
+app.get('/', function(req, res){
+    res.render('web/index.html');
 });
 
 /***********************
   Démarrage du serveur
 ************************/
-server.listen(5000); //listen for any incoming requests
+app.listen(5000); //listen for any incoming requests
 
 /***********************
       Quelques logs
