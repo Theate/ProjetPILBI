@@ -1,12 +1,13 @@
 $(window).on('load', function () {
-    $(".trigger_popup_fricc").click(function(){
+    $(".popupSettingsOppugno").click(function(){
       w3_close();
-      $('.hover_bkgr_fricc').show();
+      $('.popupSettings').show();
     });
-    $('.hover_bkgr_fricc').click(function(){
-      $('.hover_bkgr_fricc').hide();
+    $(".popupWeatherOppugno").click(function(){
+      w3_close();
+      $('.popupWeather').show();
     });
     $('.popupCloseButton').click(function(){
-      $('.hover_bkgr_fricc').hide();
+      $('.popupBackground').hide();
     });
 });

@@ -1,5 +1,4 @@
-/* Popup box BEGIN */
-.hover_bkgr_fricc{
+.popupBackground{
     background:rgba(0,0,0,.4);
     cursor:pointer;
     display:none;
@@ -10,12 +9,12 @@
     width:100%;
     z-index:10000;
 }
-.hover_bkgr_fricc .helper{
+.popupBackground .helper{
     display:inline-block;
     height:100%;
     vertical-align:middle;
 }
-.hover_bkgr_fricc > div {
+.popupBackground > div {
     background-color: #fff;
     box-shadow: 10px 10px 60px #555;
     display: inline-block;
@@ -53,4 +52,31 @@
 .trigger_popup_fricc {
     cursor: pointer;
 }
-/* Popup box BEGIN */
+@media only screen and (min-width:600px) {
+  .popupContent {
+    text-align:right;
+    padding-right:25%;
+  }
+  .popupTextContent {
+    text-align: right;
+    float: left;
+    width: 45%;
+  }
+  .popupSelectContent {
+    width: 51%
+  }
+}
+@media only screen and (max-width:600px) {
+  .popupContent {
+    margin: auto;
+  }
+  .popupTitleContent {
+    font-size: 3vw;
+  }
+  .popupInputContent {
+    width: 67%;
+  }
+  .popupSelectContent {
+    width:67%;
+  }
+}

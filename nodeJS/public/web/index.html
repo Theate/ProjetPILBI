@@ -18,7 +18,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-bar-item w3-right">SmartKoulak</span>
+  <a href="/" class="w3-bar-item w3-right">SmartKoulak</a>
 </div>
 
 <!-- Sidebar/menu -->
@@ -31,7 +31,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <span>Welcome, <strong>????</strong></span><br>
       <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a> <!--TODO add link mail-->
       <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <!--TODO add on sait pas ce que c'est-->
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+      <a href="#" class="w3-bar-item w3-button popupSettingsOppugno"><i class="fa fa-cog"></i></a>
     </div>
   </div>
   <hr>
@@ -45,34 +45,82 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Capteurs</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  Systèmes contrôlables</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  Weather</a> <!--TODO add link meteociel -->
-    <a href="#" class="w3-bar-item w3-button w3-padding trigger_popup_fricc"><i class="fa fa-cog fa-fw"></i>  Settings</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding popupWeatherOppugno"><i class="fa fa-bullseye fa-fw"></i>  Weather</a> <!--TODO add link meteociel -->
+    <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Settings</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-remove fa-fw"></i>  Déconnexion</a><br><br>
   </div>
 </nav>
 
-<!-- pop up Settings -->
-<div class="hover_bkgr_fricc">
+<!-- pop up Weather -->
+<div class="popupBackground popupWeather">
     <span class="helper"></span>
     <div>
         <div class="popupCloseButton">X</div>
         <header class="w3-container">
+          <h5><b><i class="fa fa-bullseye fa-fw"></i> Weather</b></h5>
+        </header>
+        <div>
+          <form action="weather" method="post" target="_blank">
+            <fieldset>
+              <legend class="popupTitleContent">Requiered information :</legend>
+              <br />
+              <div class="popupContent">
+                <div class="popupTextContent">
+                Zip Code or City :
+                </div>
+                <input type="text" name="location" class="popupInputContent" value=""> <br />
+              </div>
+              <br />
+              <div class="popupContent">
+                <div class="popupTextContent">
+                  Web Page :
+                </div>
+                <select name="webPage" class="popupSelectContent">
+                  <option value="meteoCiel" selected>Meteo Ciel</option>
+                  <option value="meteoFrance">Meteo France</option>
+                </select>
+                <br />
+              </div>
+              <br />
+              <input type="submit" value="Submit">
+            </div>
+          </form>
+        </fieldset>
+    </div>
+</div>
+
+<!-- pop up Settings -->
+<div class="popupBackground popupSettings">
+    <span class="helper"></span>
+    <div>
+        <div class="popupCloseButton">X</div>
+        <header>
           <h5><b><i class="fa fa-cog fa-fw"></i> Settings</b></h5>
         </header>
         <div>
-          <form action="post.html" method="post">
+          <form action="settings" method="post">
             <fieldset>
-              <legend>Personal information:</legend>
-              Pseudonym:
-              <input type="text" name="pseudo" value="">
+              <legend class="popupTitleContent">Personal information :</legend>
               <br />
-              Email:
-              <input type="text" name="email" value="">
-              <br /><br />
+              <div class="popupContent">
+                <div class="popupTextContent">
+                  Pseudonym :
+                </div>
+                <input type="text" name="pseudo" class="popupInputContent" value="">
+                <br />
+              </div>
+              <br />
+              <div class="popupContent">
+                <div class="popupTextContent">
+                  Email :
+                </div>
+                <input type="text" name="email" class="popupInputContent" value=""> <br />
+              </div>
+              <br />
               <input type="submit" value="Submit">
-            </fieldset>
+            </div>
           </form>
-        </div>
+        </fieldset>
     </div>
 </div>
 

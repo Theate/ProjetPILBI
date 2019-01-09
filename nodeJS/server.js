@@ -19,12 +19,38 @@ var server = http.createServer(app);
 /****************************************
      Gestion requete POST formulaire
 *****************************************/
-app.post('/post.html', function(req, res) {
+app.post('/weather', function(req, res) {
+  var location = req.body.location;
+  var webPage = req.body.webPage;
+  var data = "";
+  location = location.replace(/\s/g, "-");
+  console.log("location=" + location);
+  console.log("webPage=" + webPage);
+  if (webPage == "meteoFrance"){
+    data = "http://www.meteofrance.com/recherche/resultats?facet=previsions&" +
+    "lieuId=&lieuType=&query=" + location
+  }
+  if (webPage == "meteoCiel"){
+    data = "http://www.meteociel.fr/prevville.php?action=getville&villeid=&" +
+    "ville=" + location + "&envoyer=OK";
+  }
+  res.redirect(data);
+  res.end();
+});
+
+app.post('/settings', function(req, res) {
   var pseudo = req.body.pseudo;
   var mail = req.body.email;
   console.log("pseudo=" + pseudo);
   console.log("mail=" + mail);
-  res.render('index.html');
+  // var json = "{\npseudo:" + pseudo + ",\nmail:" + mail + "\n}"
+  // fs.writeFile('test', json, function(err){
+  //   if (err){
+  //     throw err;
+  //   }
+  // });
+  res.redirect('back');
+  res.end();
 });
 
 /****************************************
@@ -32,6 +58,7 @@ app.post('/post.html', function(req, res) {
 *****************************************/
 app.get('/', function(req, res){
     res.render('index.html');
+    res.end();
 });
 
 /***********************
