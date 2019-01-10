@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var path = require('path');
+const Influx = require('influx');
 
 /***************************
   Création du serveur web
@@ -15,6 +16,11 @@ app.engine('html', require('ejs').renderFile);
 // app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 var server = http.createServer(app);
+
+/*************************************
+  Mise en place de la connection DB
+**************************************/
+const influx = new Influx.InfluxDB('http://localhost:8086/');
 
 /****************************************
      Gestion requete POST formulaire
@@ -57,7 +63,8 @@ app.post('/settings', function(req, res) {
   Gestion de l'affichage des pages web
 *****************************************/
 app.get('/', function(req, res){
-    res.render('index.html');
+    influx.getDatabaseNames().then(names => console.log(names));
+	  res.render('index.html');
     res.end();
 });
 
