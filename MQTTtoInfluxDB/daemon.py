@@ -22,7 +22,7 @@ def on_message(client, userdata, msg):
         val = float(message)
         isfloatValue=True
     except:
-        logging.error("Could not convert " + message + " to a float value")
+        logging.debug("Could not convert " + message + " to a float value")
         isfloatValue=False
 
     if isfloatValue:
@@ -55,17 +55,19 @@ while(connOK == False):
         ##### Global var
         BROKER = "lora.campusiot.imag.fr"
         ORGID = '9'
-        MQTTUSER = f"org-{ORGID}"
+        MQTTUSER = "org-{}".format(ORGID)
         MQTTPASSWORD = "BkGsmPqPrR1PqhAsqMhlnWa9"
-        PORT = "8883"
+        PORT = 8883
         ##### connection settings
-        logging.debug("Création du client")
         client.tls_set(ca_certs="ca.crt")
-        client.tls_set_context()
+        client.username_pw_set(MQTTUSER, MQTTPASSWORD)
         client.connect(BROKER, port=PORT, keepalive=60, )
         connOK = True
+        logging.debug("Création client MQTT réussie")
+        client.subscribe("gateway/#")
     except:
         connOK = False
+        logging.debug("Création client MQTT a échoué")
     time.sleep(2)
 
 # Blocking loop to the Mosquitto broker
