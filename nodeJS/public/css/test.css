@@ -52,26 +52,55 @@
 .trigger_popup_fricc {
     cursor: pointer;
 }
-@media only screen and (min-width:600px) {
+@media only screen and (min-width:993px) {
   .popupContent {
     text-align:right;
-    padding-right:25%;
+    padding-bottom:10%;
   }
   .popupTextContent {
     text-align: right;
     float: left;
-    width: 45%;
+    width: 35%;
+  }
+  .popupInput {
+    text-align: left;
+    padding-left: 4%;
+    float:left;
+    width: 65%;
+  }
+  .popupSelect {
+    text-align: left;
+    padding-left: 4%;
+    float:left;
+    width: 65%;
+  }
+  .popupInputContent {
+    width: 70%;
   }
   .popupSelectContent {
-    width: 51%
+    width: 70%
   }
 }
-@media only screen and (max-width:600px) {
+@media only screen and (max-width:993px) {
   .popupContent {
     margin: auto;
+    padding-bottom: 4%;
+  }
+  #lastContent {
+    padding-bottom: 6%;
   }
   .popupTitleContent {
     font-size: 3vw;
+  }
+  .popupTextContent {
+    text-align: center;
+    width:100%;
+  }
+  .popupInput {
+    width: 100%;
+  }
+  .popupSelect {
+    width: 100%;
   }
   .popupInputContent {
     width: 67%;
