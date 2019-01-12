@@ -60,6 +60,35 @@ app.post('/settings', function(req, res) {
   res.end();
 });
 
+function printLog(error, stdout, stderr) {
+  console.log('stdout : ' + stdout);
+  console.log('stderr : ' + stderr);
+}
+
+/*
+Attention, n'importe qui peut poster cette requete et
+tuer les systemes controlables du fermier
+*/
+app.post('/stop', function(req, res){
+
+    // Kill the controlable-systems manager
+    murderer = exec("pkill daemon.py", printLog);
+
+    // send main page in return
+    res.redirect('back');
+    res.end();
+});
+
+app.post('/start', function(req, res){
+
+    // Run the controlable-systems manager
+    murder = exec("~/daemon.py", printLog)
+
+    // send main page in return
+    res.redirect('back');
+    res.end();
+});
+
 /****************************************
   Gestion de l'affichage des pages web
 *****************************************/
@@ -70,35 +99,6 @@ app.get('/', function(req, res){
     // .then(result => {console.log(result)})
     // .catch(error => {console.error(`ERROR : ${err.stack}`)});
 	  res.render('index.html');
-    res.end();
-});
-
-function printLog(error, stdout, stderr) {
-  console.log('stdout : ' + stdout);
-  console.log('stderr : ' + stderr);
-}
-
-/*
-Attention, n'importe qui pour poster cette requete et
-tuer les systemes controlables du fermier
-*/
-app.get('/stop', function(req, res){
-
-    // Kill the controlable-systems manager
-    murder = exec("pkill daemon.py", printLog)
-
-    // send main page in return
-    res.redirect('back');
-    res.end();
-});
-
-app.get('/start', function(req, res){
-
-    // Run the controlable-systems manager
-    murder = exec("~/daemon.py", printLog)
-
-    // send main page in return
-    res.redirect('back');
     res.end();
 });
 
