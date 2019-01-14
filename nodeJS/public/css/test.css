@@ -52,6 +52,29 @@
 .trigger_popup_fricc {
     cursor: pointer;
 }
+.selecteur {
+  margin: 0 auto;
+}
+.from {
+  float:left;
+  width: 50%;
+  margin: 0 auto;
+}
+.to {
+  float:left;
+  width: 50%;
+  margin: 0 auto;
+}
+.textSelector {
+  text-align: right;
+  float:left;
+  width: 10%;
+}
+.selector {
+  text-align: right;
+  float:left;
+  width:90%;
+}
 @media only screen and (min-width:993px) {
   .popupContent {
     text-align:right;
@@ -127,6 +150,18 @@
   .systemeControlables {
     padding-top: 8%;
   }
+  .textSelector {
+    font-size: 2.5vw;
+  }
+  .selector {
+    font-size: 2vw;
+  }
+  .to {
+    width:100%;
+  }
+  .from {
+    width:100%;
+  }
 }
 .sensorGraph {
   text-align: center;
@@ -138,6 +173,7 @@
   width:85%;
 }
 .image {
+  margin: 0 auto;
   width:100%;
 }
 .systemeControlable {
@@ -163,6 +199,11 @@
   border-bottom-left-radius:15px;
   border-bottom-right-radius:15px;
 }
+/* .headTuile {
+  background-color: rgba(33,33,36,1);
+  margin: 0 auto;
+  text-align: center;
+} */
 .headTuile {
   background-color: rgba(33,33,36,1);
   width: 75%;

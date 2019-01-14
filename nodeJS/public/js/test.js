@@ -39,6 +39,12 @@ $('.bouttonHumidite').mousedown(function (e) {
   }
 });
 
+var item = "";
+for (let i = 1; i<=52; i++){
+  item = '<option value="'+i+'">'+i+'</option>';
+  $(item).appendTo("#temperatureFromWeek");
+}
+
 // Gestion evenement modification du select de la temperature
 function onTemperatureSelected(){
   let value = $('select#selectionTemperature').val(); // valeur du select
