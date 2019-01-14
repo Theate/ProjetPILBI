@@ -36,7 +36,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   </div>
   <hr>
   <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-red w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
+    <span class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-red w3-hover-black" id="close" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</span>
   </div>
   <div class="w3-container w3-blue">
     <h5>Dashboard</h5>
@@ -44,7 +44,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Capteurs</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  Systèmes contrôlables</a>
+    <a href="#systemeControlables" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  Systèmes contrôlables</a>
     <a href="#" class="w3-bar-item w3-button w3-padding popupWeatherOppugno"><i class="fa fa-bullseye fa-fw"></i>  Weather</a> <!--TODO add link meteociel -->
     <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Settings</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-remove fa-fw"></i>  Déconnexion</a><br><br>
@@ -53,77 +53,81 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
 <!-- pop up Weather -->
 <div class="popupBackground popupWeather">
-    <span class="helper"></span>
+  <span class="helper"></span>
+  <div>
+    <div class="popupCloseButton">X</div>
+    <header class="w3-container">
+      <h5><b><i class="fa fa-bullseye fa-fw"></i> Weather</b></h5>
+    </header>
     <div>
-        <div class="popupCloseButton">X</div>
-        <header class="w3-container">
-          <h5><b><i class="fa fa-bullseye fa-fw"></i> Weather</b></h5>
-        </header>
-        <div>
-          <form action="weather" method="post" target="_blank">
-            <fieldset>
-              <legend class="popupTitleContent">Requiered information :</legend>
-              <br />
-              <div class="popupContent">
-                <div class="popupTextContent">
-                ZipCode or City :
-                </div>
-                <input type="text" name="location" class="popupInputContent" value=""> <br />
-              </div>
-              <br />
-              <div class="popupContent">
-                <div class="popupTextContent">
-                  Web Page :
-                </div>
-                <select name="webPage" class="popupSelectContent">
-                  <option value="meteoCiel" selected>Meteo Ciel</option>
-                  <option value="meteoFrance">Meteo France</option>
-                </select>
-                <br />
-              </div>
-              <br />
-              <input type="submit" value="Submit">
+      <form action="weather" method="post" target="_blank">
+        <fieldset>
+          <legend class="popupTitleContent">Requiered information :</legend>
+          <br />
+          <div class="popupContent">
+            <div class="popupTextContent">
+            ZipCode or City :
             </div>
-          </form>
+            <div class="popupInput">
+            <input type="text" name="location" class="popupInputContent" value=""> <br />
+            </div>
+          </div>
+          <div class="popupContent" id="lastContent">
+            <div class="popupTextContent">
+              Web Page :
+            </div>
+            <div class="popupSelect">
+            <select name="webPage" class="popupSelectContent">
+              <option value="meteoCiel" selected>Meteo Ciel</option>
+              <option value="meteoFrance">Meteo France</option>
+            </select>
+            </div>
+          </div>
+          <br />
+          <input type="submit" value="Submit">
         </fieldset>
-        <br />
+      </form>
+      <br />
     </div>
+  </div>
 </div>
 
 <!-- pop up Settings -->
 <div class="popupBackground popupSettings">
-    <span class="helper"></span>
+  <span class="helper"></span>
+  <div>
+    <div class="popupCloseButton">X</div>
+    <header>
+      <h5><b><i class="fa fa-cog fa-fw"></i> Settings</b></h5>
+    </header>
     <div>
-        <div class="popupCloseButton">X</div>
-        <header>
-          <h5><b><i class="fa fa-cog fa-fw"></i> Settings</b></h5>
-        </header>
-        <div>
-          <form action="settings" method="post">
-            <fieldset>
-              <legend class="popupTitleContent">Personal information :</legend>
-              <br />
-              <div class="popupContent">
-                <div class="popupTextContent">
-                  Pseudonym :
-                </div>
-                <input type="text" name="pseudo" class="popupInputContent" value="">
-                <br />
-              </div>
-              <br />
-              <div class="popupContent">
-                <div class="popupTextContent">
-                  Email :
-                </div>
-                <input type="text" name="email" class="popupInputContent" value=""> <br />
-              </div>
-              <br />
-              <input type="submit" value="Submit">
+      <form action="settings" method="post">
+        <fieldset>
+          <legend class="popupTitleContent">Personal information :</legend>
+          <br />
+          <div class="popupContent">
+            <div class="popupTextContent">
+              Pseudonym :
             </div>
-          </form>
+            <div class="popupInput">
+            <input type="text" name="pseudo" class="popupInputContent" value="">
+            </div>
+          </div>
+          <div class="popupContent" id="lastContent">
+            <div class="popupTextContent">
+              Email :
+            </div>
+            <div class="popupInput">
+            <input type="text" name="email" class="popupInputContent" value=""> <br />
+            </div>
+          </div>
+          <br />
+          <input type="submit" value="Submit">
         </fieldset>
-        <br />
+      </form>
+      <br />
     </div>
+  </div>
 </div>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -133,20 +137,104 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <div class="w3-main" style="margin-left:300px;margin-top:43px;">
 
   <!-- Header -->
-  <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+  <header class="w3-container" style="padding-top:15px">
+    <h5><b><i class="fa fa-dashboard"></i> Mes données capteur</b></h5>
   </header>
 
-  <div class="w3-row-padding w3-margin-bottom">
+  <!-- Tuile Temperature -->
+  <div class="sensorGraph">
+    <div class="sensorGraphImage">
+      <div class="tuile bouton bouttonTemperature">
+        <div class="headTuile">
+          <p class="systemTitle"><B>Evolution de la temperature</B></p>
+          <p>
+            Graphique représentant l'évolution de la température
+            de la surface agricole. A l'aide du selecteur ci-dessous il est possible
+            de modifier l'intervalle temporel étudié.
+          </p>
+        </div>
+        <!-- <div class="bodyTuile">
+          <p>
+            Le graphique ci-dessous représente l'évolution de la température
+            de la surface agricole. A l'aide du selecteur ci-dessous il est possible
+            de modifier l'intervalle temporel étudié.
+          </p>
+        </div> -->
+        <div class="graphique" id="details">
+          <img class="image" alt="Graphe en cours de chargement..."
+          src="http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
+          <!-- <canvas id="radar"></canvas> -->
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tuile Humidité -->
+  <div class="sensorGraph">
+    <div class="sensorGraphImage">
+      <div class="tuile bouton bouttonHumidite">
+        <div class="headTuile">
+          <p class="systemTitle"><B>Evolution de l'humidité</B></p>
+          <p>
+            Graphique représentant l'évolution de l'humidité des
+            sols de la surface agricole. A l'aide du selecteur ci-dessous il
+            est possible de modifier l'intervalle temporel étudié.
+          </p>
+        </div>
+        <div class="graphique" id="details2">
+          <img class="image" alt="Graphe en cours de chargement..."
+          src="http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
+          <br />
+        </div>
+        <span id="systemeControlables"></span>
+      </div>
+    </div>
+  </div>
+
+	<!-- <img src="http://redtacos.ddns.net:3000/render/d-solo/jPN0ozzRk/dashbord-242?orgId=1&panelId=2&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00"> -->
+
+  <!-- Header -->
+  <header class="w3-container systemeControlables">
+    <h5><b><i class="fa fa-dashboard"></i> Mes systèmes contrôlables</b></h5>
+  </header>
+
+  <div class="systemeControlable">
+    <div class="firstSystemeControlable">
+      <form action="start" method="post">
+        <fieldset>
+          <legend class="popupTitleContent">Activation des systèmes contrôlables :</legend>
+          <br />
+          <div style="text-align:center; padding-bottom:4%">
+            <input type="submit" value="Start">
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="lastSystemeControlable">
+      <form action="stop" method="post">
+        <fieldset>
+          <legend class="popupTitleContent">Interruption des systèmes contrôlables :</legend>
+          <br />
+          <div style="text-align:center; padding-bottom:4%">
+            <input type="submit" value="Stop">
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <p><br /><br /><br /></p>
+
+	<!--<div class="w3-row-padding w3-margin-bottom">
     <div class="w3-quarter">
       <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+				<div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3>52</h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>Messages</h4>
-      </div>
+        <h4>Coucou</h4>
+			</div>
     </div>
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
@@ -178,7 +266,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <h4>Users</h4>
       </div>
     </div>
-  </div>
+	</div>-->
 
   <div class="w3-panel">
     <div class="w3-row-padding" style="margin:0 -16px">

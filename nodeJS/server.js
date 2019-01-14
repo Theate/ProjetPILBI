@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var path = require('path');
+var exec = require('child_process').exec;
 const Influx = require('influx');
 
 /***************************
@@ -20,7 +21,7 @@ var server = http.createServer(app);
 /*************************************
   Mise en place de la connection DB
 **************************************/
-const influx = new Influx.InfluxDB('http://localhost:8086/');
+const influx = new Influx.InfluxDB('http://redtacos.ddns.net:8086/SENSOR_DATA');
 
 /****************************************
      Gestion requete POST formulaire
@@ -59,11 +60,44 @@ app.post('/settings', function(req, res) {
   res.end();
 });
 
+function printLog(error, stdout, stderr) {
+  console.log('stdout : ' + stdout);
+  console.log('stderr : ' + stderr);
+}
+
+/*
+Attention, n'importe qui peut poster cette requete et
+tuer les systemes controlables du fermier
+*/
+app.post('/stop', function(req, res){
+
+    // Kill the controlable-systems manager
+    murderer = exec("pkill daemon.py", printLog);
+
+    // send main page in return
+    res.redirect('back');
+    res.end();
+});
+
+app.post('/start', function(req, res){
+
+    // Run the controlable-systems manager
+    murder = exec("~/daemon.py", printLog)
+
+    // send main page in return
+    res.redirect('back');
+    res.end();
+});
+
 /****************************************
   Gestion de l'affichage des pages web
 *****************************************/
 app.get('/', function(req, res){
-    influx.getDatabaseNames().then(names => console.log(names));
+    // influx.getDatabaseNames().then(names => console.log(names))
+    // .catch(error => {console.error(`ERROR : ${err.stack}`)});
+    // influx.query('SELECT * FROM temperature')
+    // .then(result => {console.log(result)})
+    // .catch(error => {console.error(`ERROR : ${err.stack}`)});
 	  res.render('index.html');
     res.end();
 });
