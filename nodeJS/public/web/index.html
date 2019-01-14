@@ -155,41 +155,41 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         </div>
 
         <div class="graphique" id="details">
-          <div style="text-align:center; margin: 0 auto;padding-bottom:10% padding-top: 15%">
+          <div class="selecteur">
             <div class="from">
-                <div class="textSelector">
-                  De :
-                </div>
-                <div class=selector>
-                  <select style="width:30%" id="temperatureFromWeek">
-                      <option value="0" selected>Semaine</option>
-                  </select>
-                  <select style="width:30%" id="temperatureFromDay">
-                      <option value="0" selected>Jour</option>
-                  </select>
-                  <select style="width:30%" id="temperatureFromHour">
-                      <option value="0" selected> Heure</option>
-                  </select>
-                </div>
+              <div class="textSelector">
+                De :
               </div>
-              <div class="to">
-                <div class="textSelector">
-                  A :
-                </div>
-                <div class=selector>
-                  <select style="width:30%; font-size:100%" id="temperatureToWeek">
-                      <option value="0" selected>Semaine</option>
-                  </select>
-                  <select style="width:30%; font-size:100%" id="temperatureToDay">
-                      <option value="0" selected>Jour</option>
-                  </select>
-                  <select style="width:30%; font-size:100%" id="temperatureToHour">
-                      <option value="0" selected>Heure</option>
-                  </select>
-                </div>
+              <div class=selector>
+                <select style="width:30%" id="temperatureFromWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="temperatureFromDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="temperatureFromHour">
+                  <option value="0" selected> Heure</option>
+                </select>
               </div>
             </div>
-          <img class="image" alt="Graphe en cours de chargement..."
+            <div class="to">
+              <div class="textSelector">
+                A :
+              </div>
+              <div class=selector>
+                <select style="width:30%" id="temperatureToWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="temperatureToDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="temperatureToHour">
+                  <option value="0" selected>Heure</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <img class="image" id="image1" alt="Graphe en cours de chargement..."
           src="http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
           <!-- <canvas id="radar"></canvas> -->
           <br />
@@ -201,19 +201,52 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <!-- Tuile Humidité -->
   <div class="sensorGraph">
     <div class="sensorGraphImage">
-      <div class="tuile bouton bouttonHumidite">
-        <div class="headTuile">
-          <div class="textHeadTuile">
-            <p class="systemTitle"><B>Evolution de l'humidité</B></p>
-            <p>
-              Graphique représentant l'évolution de l'humidité des
-              sols de la surface agricole. A l'aide du selecteur ci-dessous il
-              est possible de modifier l'intervalle temporel étudié.
-            </p>
-          </div>
+      <div class="tuile bouton">
+        <div class="headTuile bouttonHumidite">
+          <p class="systemTitle"><B>Evolution de l'humidité</B></p>
+          <p>
+            Graphique représentant l'évolution de l'humidité des
+            sols de la surface agricole. A l'aide du selecteur ci-dessous il
+            est possible de modifier l'intervalle temporel étudié.
+          </p>
         </div>
+
         <div class="graphique" id="details2">
-          <img class="image" alt="Graphe en cours de chargement..."
+          <div class="selecteur">
+            <div class="from">
+              <div class="textSelector">
+                De :
+              </div>
+              <div class=selector>
+                <select style="width:30%" id="humidityFromWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="humidityFromDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="humidityFromHour">
+                  <option value="0" selected> Heure</option>
+                </select>
+              </div>
+            </div>
+            <div class="to">
+              <div class="textSelector">
+                A :
+              </div>
+              <div class=selector>
+                <select style="width:30%" id="humidityToWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="humidityToDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="humidityToHour">
+                  <option value="0" selected>Heure</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <img class="image" id="image2" alt="Graphe en cours de chargement..."
           src="http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
           <br />
         </div>
