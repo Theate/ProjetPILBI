@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from time import sleep
 from database_access import DBConnexion
 from abc import ABC, abstractmethod
@@ -46,7 +48,7 @@ class AbstractRule(ABC):
 class Freeze(AbstractRule):
     """ Quand le système est gelé ('freeze'), tous les systèmes controllables doivent être désactivés """
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
 
     def condition(self, db_connexion):
         state = db_connexion.is_freeze()
@@ -71,7 +73,7 @@ class Freeze(AbstractRule):
 class AbstractActivationRule(AbstractRule):
     """ Une classe abstraite pour gérer l'activation automatique des systèmes controllables """
     def __init__(self, controllable_system, id_station):
-        super().__init__(self)
+        super().__init__()
         self.controllable_system = controllable_system
         self.id_station = id_station
 
@@ -109,6 +111,8 @@ class ActivateWatering(AbstractActivationRule):
         if last_soil_moisture < 50: # Random
             # Le sol est desséché
             return True
+        if last_temperature is None:
+            return False
         if last_soil_moisture < 70 and last_temperature < 245:
             # Le sol est un peu sec et il fait frais
             return True
