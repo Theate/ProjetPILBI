@@ -21,7 +21,7 @@ var server = http.createServer(app);
 /*************************************
   Mise en place de la connection DB
 **************************************/
-const influx = new Influx.InfluxDB('http://redtacos.ddns.net:8086/SENSOR_DATA');
+const influx = new Influx.InfluxDB('http://redtacos.ddns.net:8086/CONTROLLABLE_SYSTEMS');
 
 /****************************************
      Gestion requete POST formulaire
@@ -65,10 +65,26 @@ function printLog(error, stdout, stderr) {
   console.log('stderr : ' + stderr);
 }
 
-/*
-Attention, n'importe qui peut poster cette requete et
-tuer les systemes controlables du fermier
-*/
+app.post('/startWatering', function(req, res){
+
+    var station = req.body.value;
+    // Start the corresponding station
+    // exec("", printLog) #TODO : requete base de données démarrant la station
+    // console.log("demarrage station" + station);
+    res.json("{'success':1}");
+    res.end();
+});
+
+app.post('/stopWatering', function(req, res){
+
+    var station = req.body.value;
+    // Stop the corresponding station
+    // exec("", printLog) #TODO : requete base de données arretant la station
+    // console.log("arrêt station" + station);
+    res.json("{'success':1}");
+    res.end();
+});
+
 app.post('/stop', function(req, res){
 
     // Kill the controlable-systems manager
@@ -95,11 +111,18 @@ app.post('/start', function(req, res){
 app.get('/', function(req, res){
     // influx.getDatabaseNames().then(names => console.log(names))
     // .catch(error => {console.error(`ERROR : ${err.stack}`)});
-    // influx.query('SELECT * FROM temperature')
-    // .then(result => {console.log(result)})
-    // .catch(error => {console.error(`ERROR : ${err.stack}`)});
 	  res.render('index.html');
     res.end();
+});
+
+app.get('/irrigation', function(req, res){
+  var json = influx.query('select id_station,last(value) from watering group by id_station;')
+  .then(function(result){
+    console.log(result);
+    res.json(JSON.stringify(result));
+    res.end();
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
 /***********************
