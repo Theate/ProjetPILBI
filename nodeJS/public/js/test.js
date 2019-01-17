@@ -1,20 +1,3 @@
-$(window).on('load', function () {
-    $("#close").click(function(){
-      w3_close();
-    });
-    $(".popupSettingsOppugno").click(function(){
-      w3_close();
-      $('.popupSettings').show();
-    });
-    $(".popupWeatherOppugno").click(function(){
-      w3_close();
-      $('.popupWeather').show();
-    });
-    $('.popupCloseButton').click(function(){
-      $('.popupBackground').hide();
-    });
-});
-
 var showDetails = false;
 $('.bouttonTemperature').mousedown(function (e) {
   if (showDetails) {
@@ -37,6 +20,26 @@ $('.bouttonHumidite').mousedown(function (e) {
     document.getElementById("details2").style.display = "block";
     showDetails2 = true;
   }
+});
+
+$('.boutonDeconnection').mousedown(function (e) {
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  location.reload();
+});
+
+$("#close").click(function(){
+  w3_close();
+});
+$(".popupSettingsOppugno").click(function(){
+  w3_close();
+  $('.popupSettings').show();
+});
+$(".popupWeatherOppugno").click(function(){
+  w3_close();
+  $('.popupWeather').show();
+});
+$('.popupCloseButton').click(function(){
+  $('.popupBackground').hide();
 });
 
 var item = "";

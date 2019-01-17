@@ -4,7 +4,12 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
+var secret = "MeilleurMotDePasseDuMonde";
 const Influx = require('influx');
+let jwt = require('jsonwebtoken');
+var cookieParser = require('cookie-parser');
+const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcryptjs');
 
 /***************************
   Création du serveur web
@@ -16,12 +21,16 @@ app.engine('html', require('ejs').renderFile);
 // app.set('view engine', 'html');
 // app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 var server = http.createServer(app);
 
 /*************************************
   Mise en place de la connection DB
 **************************************/
 const influx = new Influx.InfluxDB('http://redtacos.ddns.net:8086/SENSOR_DATA');
+let sqlite = new sqlite3.Database('database.sqlite')
+
+// bcrypt.hash("ParceQueLesChampignonsCEstBon", 10, function(err, hash) {console.log(hash);});
 
 /****************************************
      Gestion requete POST formulaire
@@ -98,8 +107,43 @@ app.get('/', function(req, res){
     // influx.query('SELECT * FROM temperature')
     // .then(result => {console.log(result)})
     // .catch(error => {console.error(`ERROR : ${err.stack}`)});
-	  res.render('index.html');
-    res.end();
+    if (req.cookies.token) {
+      jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
+        if (error) {
+          res.render('login.html', {message: "Erreur d'authentification"});
+        } else {
+          res.render('index.html', {username: authorizedData.username});
+        }
+      })
+    } else {
+	    res.render('login.html', {message: "Identifiez-vous pour accéder à l'application"});
+    }
+});
+
+app.post('/login', function(req, res){
+  let username = req.body.login
+  let password = req.body.mdp
+  if (username && password) {
+    let foundUsername = false;
+    let correctPassword = false;
+    sqlite.get("SELECT * FROM users WHERE username == ?", [username], (error, row) => {
+      if (row) {
+        bcrypt.compare(password, row.password, function(err, compareResult) {
+          if (compareResult) {
+            let token = jwt.sign({username: username}, secret);
+            res.cookie('token', token)
+              .redirect('/');
+          } else {
+            res.render('login.html', {message: "Mot de passe incorrect"});
+          }
+        })
+      } else {
+        res.render('login.html', {message: "Il n'existe aucun utilisateur avec ce login"});
+      }
+    })
+  } else {
+    res.render('login.html', {message: "Remplissez les champs login et mot de passe pour vous authentifier"});
+  }
 });
 
 /***********************
