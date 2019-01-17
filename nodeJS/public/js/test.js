@@ -1,62 +1,46 @@
-$(window).on('load', function () {
-    $("#close").click(function(){
-      w3_close();
-    });
-    $(".popupSettingsOppugno").click(function(){
-      w3_close();
-      $('.popupSettings').show();
-    });
-    $(".popupWeatherOppugno").click(function(){
-      w3_close();
-      $('.popupWeather').show();
-    });
-    $('.popupCloseButton').click(function(){
-      $('.popupBackground').hide();
-    });
-    $.get('irrigation', function(data, status){
-      json = JSON.parse(data);
-      for (let i=0; i<json.length; i++){
-        var div = "<div class='controlableSystems'><div class='controlableSystem'>";
-        var name = "<div style='float:left;width:50%;text-align:right; " +
-        "padding-right:5%'>Irrigation sur station " + json[i].id_station + "</div>";
-        var checkbox = '<label class="switch"><input id="station' +
-        json[i].id_station + '" type="checkbox">' +
-        '<div class="slider round"></div></label>';
-        var state = "<div class='comment' id='comment" + json[i].id_station + "'></div>";
-        var close = "</div></div><br />";
+$.get('irrigation', function(data, status){
+  json = JSON.parse(data);
+  for (let i=0; i<json.length; i++){
+    var div = "<div class='controlableSystems'><div class='controlableSystem'>";
+    var name = "<div style='float:left;width:50%;text-align:right; " +
+    "padding-right:5%'>Irrigation sur station " + json[i].id_station + "</div>";
+    var checkbox = '<label class="switch"><input id="station' +
+    json[i].id_station + '" type="checkbox">' +
+    '<div class="slider round"></div></label>';
+    var state = "<div class='comment' id='comment" + json[i].id_station + "'></div>";
+    var close = "</div></div><br />";
 
-        var toPrint = div + name + checkbox + state + close;
-        document.getElementById("controlableSystemsArea").innerHTML += toPrint;
-      }
-      for (let i=0; i<json.length; i++){
+    var toPrint = div + name + checkbox + state + close;
+    document.getElementById("controlableSystemsArea").innerHTML += toPrint;
+  }
+  for (let i=0; i<json.length; i++){
 
-        if (json[i].last == 1) {
+    if (json[i].last == 1) {
+      document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
+      document.getElementById("station" + json[i].id_station).checked = true;
+    }
+
+    $("#station" + json[i].id_station).click(function(){
+      if (document.getElementById("station" + json[i].id_station).checked){
+        $.post("startWatering", {value:json[i].id_station}, function(data, status){
+          // console.log("station " + json[i].id_station + " démarrée");
           document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
-          document.getElementById("station" + json[i].id_station).checked = true;
-        }
-
-        $("#station" + json[i].id_station).click(function(){
-          if (document.getElementById("station" + json[i].id_station).checked){
-            $.post("startWatering", {value:json[i].id_station}, function(data, status){
-              // console.log("station " + json[i].id_station + " démarrée");
-              document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
-            });
-          } else {
-            $.post("stopWatering", {value:json[i].id_station}, function(data, status){
-              // console.log("station " + json[i].id_station + " arrêtée");
-              document.getElementById("comment" + json[i].id_station).innerHTML = "";
-            });
-          }
+        });
+      } else {
+        $.post("stopWatering", {value:json[i].id_station}, function(data, status){
+          // console.log("station " + json[i].id_station + " arrêtée");
+          document.getElementById("comment" + json[i].id_station).innerHTML = "";
         });
       }
-  });
+    });
+  }
 });
-    // $('#startSC').click(function() {
-    //   $.post('start', function(){
-    //     document.getElementById("message").innerHTML = 'Systèmes Contrôlables arrêtés!';
-    //     document.getElementById("message").style.display = "block";
-    //   });
-    // })
+// $('#startSC').click(function() {
+//   $.post('start', function(){
+//     document.getElementById("message").innerHTML = 'Systèmes Contrôlables arrêtés!';
+//     document.getElementById("message").style.display = "block";
+//   });
+// })
 
 var showDetails = false;
 $('.bouttonTemperature').mousedown(function (e) {
@@ -80,6 +64,26 @@ $('.bouttonHumidite').mousedown(function (e) {
     document.getElementById("details2").style.display = "block";
     showDetails2 = true;
   }
+});
+
+$('.boutonDeconnection').mousedown(function (e) {
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  location.reload();
+});
+
+$("#close").click(function(){
+  w3_close();
+});
+$(".popupSettingsOppugno").click(function(){
+  w3_close();
+  $('.popupSettings').show();
+});
+$(".popupWeatherOppugno").click(function(){
+  w3_close();
+  $('.popupWeather').show();
+});
+$('.popupCloseButton').click(function(){
+  $('.popupBackground').hide();
 });
 
 var item = "";
