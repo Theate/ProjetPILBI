@@ -1,0 +1,41 @@
+.tuileLogIn {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  border-radius: 34px;
+  border: 1px outset rgba(130,130,130,0.4);
+  box-shadow: 1px 1px rgba(0,0,0,0.3);
+}
+.logInTitle {
+  padding-top:4%;
+  padding-bottom:2%;
+  text-transform: uppercase;
+}
+.logInComment {
+  font-style: italic;
+}
+.logInContent {
+  margin: 0 auto;
+  text-align: center;
+}
+.hr {
+  visibility: hidden;
+  clear: both;
+}
+.leftText {
+  width: 33%;
+  float:left;
+  text-align: right;
+  margin-right: 2%;
+  padding-bottom: 5%;
+}
+.rightText {
+  float:left;
+  width: 65%;
+  margin: 0 auto;
+  text-align: left;
+}
+.input {
+  width: 45%;
+}

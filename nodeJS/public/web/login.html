@@ -5,42 +5,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/test.css">
+<link rel="stylesheet" href="css/login.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body class="w3-light-grey">
 
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i
-            class="fa fa-bars"></i> Menu</button>
     <a href="/" class="w3-bar-item w3-right">SmartKoulak</a>
 </div>
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+<div class="w3-main" style="margin-top:43px;">
 
-    <!-- Header -->
-    <header class="w3-container" style="padding-top:15px">
-        LOGUE TOI KONNAR
-    </header>
+    <div class="tuileLogIn">
+      <div class="logInContent">
+        <!-- Header -->
+        <div class="logInTitle">
+            Authentification
+        </div>
 
-    <div>
-        <%= message %>
+        <div class="logInComment">
+            <%= message %>
+        </div>
+        <br />
+
+        <form action="login" method="POST">
+            <div class="leftText">
+              Login :
+            </div>
+            <div class="rightText">
+              <input class="input" name="login" type="text"><br>
+            </div>
+            <div style="clear:both"></div>
+            <div class="leftText">
+              Mot de passe :
+            </div>
+            <div class="rightText">
+              <input class="input" name="mdp" type="password"><br>
+            </div>
+            <br />
+            <div style="clear:both">
+            <input type="submit" value="Soumettre">
+            </div>
+        </form>
+        <br />
+      </div>
     </div>
-
-    <form action="login" method="POST">
-        Login : <input name="login" type="text"><br>
-        Mot de passe : <input name="mdp" type="password"><br>
-        <input type="submit" value="Soumettre">
-    </p></form>
 
 </div>
 
 </body>
 </html>
-    
