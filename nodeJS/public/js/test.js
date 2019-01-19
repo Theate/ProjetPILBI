@@ -245,13 +245,17 @@ if (!!window.EventSource) {
       for (let i=1; i <= controlablesNumber; i++) {
         if (e.data.includes("id_station" + i)) {
           if (document.getElementById("station" + i).checked) {
-            document.getElementById("comment" + i).innerHTML = "Inactif";
-            document.getElementById("comment" + i).style.color = "red";
-            document.getElementById("station" + i).checked = false;
+            if (e.data.includes("value0")) {
+              document.getElementById("comment" + i).innerHTML = "Inactif";
+              document.getElementById("comment" + i).style.color = "red";
+              document.getElementById("station" + i).checked = false;
+            }
           } else {
-            document.getElementById("comment" + i).innerHTML = "Actif";
-            document.getElementById("comment" + i).style.color = "green";
-            document.getElementById("station" + i).checked = true;
+            if (e.data.includes("value1")) {
+              document.getElementById("comment" + i).innerHTML = "Actif";
+              document.getElementById("comment" + i).style.color = "green";
+              document.getElementById("station" + i).checked = true;
+            }
           }
         }
       }

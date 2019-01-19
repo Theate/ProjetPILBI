@@ -75,44 +75,58 @@ function printLog(error, stdout, stderr) {
 }
 
 app.post('/startWatering', function(req, res){
-
-    var station = req.body.value;
-    // Start the corresponding station
-    // exec("", printLog) #TODO : requete base de données démarrant la station
-    // console.log("demarrage station" + station);
+  var station = req.body.value;
+  // Start the corresponding station
+  influx.writePoints([
+    {
+      measurement:'watering',
+      tags: { id_station:station },
+      fields: { value:1 },
+    }
+  ])
+  .then(function(result){
     res.json("{'success':1}");
     res.end();
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
 app.post('/stopWatering', function(req, res){
-
-    var station = req.body.value;
-    // Stop the corresponding station
-    // exec("", printLog) #TODO : requete base de données arretant la station
-    // console.log("arrêt station" + station);
+  var station = req.body.value;
+  // Stop the corresponding station
+  influx.writePoints([
+    {
+      measurement:'watering',
+      tags: { id_station:station },
+      fields: { value:0 },
+    }
+  ])
+  .then(function(result){
     res.json("{'success':1}");
     res.end();
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
-app.post('/stop', function(req, res){
-
-    // Kill the controlable-systems manager
-    murderer = exec("pkill daemon.py", printLog);
-
-    // send main page in return
-    res.redirect('back');
-    res.end();
-});
-
-app.post('/start', function(req, res){
-
-    // Run the controlable-systems manager
-    murder = exec("~/daemon.py", printLog)
-
-    // send main page in return
-    res.redirect('back');
-    res.end();
-});
+// app.post('/stop', function(req, res){
+//
+//     // Kill the controlable-systems manager
+//     murderer = exec("pkill daemon.py", printLog);
+//
+//     // send main page in return
+//     res.redirect('back');
+//     res.end();
+// });
+//
+// app.post('/start', function(req, res){
+//
+//     // Run the controlable-systems manager
+//     murder = exec("~/daemon.py", printLog)
+//
+//     // send main page in return
+//     res.redirect('back');
+//     res.end();
+// });
 
 /****************************************
   Gestion de l'affichage des pages web
@@ -207,7 +221,8 @@ function getControlableSystemsState(){
     for (let station = 0; station < previous.length; station++){
       // updatedValues.hasOwnProperty(name)
       if (current[station]["last"] != previous[station]["last"]){
-        modifiedControlables.push("id_station" + previous[station]["id_station"]);
+        // console.log("real time : " + "id_station" + previous[station]["id_station"] + " --> " + current[station]["last"]);
+        modifiedControlables.push("id_station" + previous[station]["id_station"] + "#value" + current[station]["last"]);
       }
     }
   })
@@ -248,10 +263,13 @@ app.get('/mode', function(req, res){
 });
 
 app.post('/changeMode', function(req, res){
-  var mode = req.body.value;
+  var mode = 0;
+  if (req.body.value == '1') {
+    mode = 1;
+  };
   influx.writePoints([
     {
-      measurement:'perf',
+      measurement:'mode',
       tags: { tag:'mode' },
       fields: { value:mode },
     }
