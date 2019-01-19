@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import paho.mqtt.client as mqtt
+import time
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -28,6 +29,10 @@ client.tls_set(ca_certs="ca.crt")
 client.username_pw_set(MQTTUSER, MQTTPASSWORD)
 client.connect(BROKER, port=PORT, keepalive=60, )
 
+while True:
+    client.publish("application/64", "PAYLOAD")
+    time.sleep(2)
+    
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
 # Other loop*() functions are available that give a threaded interface and a

@@ -11,23 +11,22 @@ logging.basicConfig(level=logging.DEBUG)
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("gateway/+/stats")
+    client.subscribe("application/64/#")
     
 def on_message(client, userdata, msg):
     logging.debug("Received a message on topic: " + msg.topic)
     # Use utc as timestamp
     receiveTime=datetime.datetime.utcnow()
     message=msg.payload.decode("utf-8")
+    print(message)
     try:
         # Convert the string to a float so that it is stored as a number and not a string in the database
         dict = json.loads(message)
     except:
         logging.debug("Could not convert " + message + " to a dictionnary")
         return
-    logging.debug("Transfo de dict")
-    print(dict)
-    # création du json_body 
-    #dbclient.write_points(json_body)
+    logging.debug(dict["data"])
+    logging.debug("Contenu en data: " + dict["data"])
     logging.debug("Finished writing to InfluxDB")
         
 # Set up a client for InfluxDB
