@@ -162,10 +162,75 @@ app.post('/login', function(req, res){
   }
 });
 
-app.get('/irrigation', function(req, res){
-  var json = influx.query('select id_station,last(value) from watering group by id_station;')
+var connections = []
+var controlablesCurrentStates = {};
+var modifiedControlables = [];
+
+function sseSend(res, data){
+  res.write("data: " + JSON.stringify(data) + "\n\n");
+}
+
+app.get('/stream', function(req, res) {
+
+  influx.query('select id_station,last(value) from watering group by id_station;')
   .then(function(result){
-    console.log(result);
+    controlablesCurrentStates = JSON.stringify(result);
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
+    });
+    sseSend(res, "{'success':1}");
+    connections.push(res);
+
+    setInterval(daemon, 5*1000);
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
+})
+
+function getControlableSystemsState(){
+  var updatedValues;
+
+  influx.query('select id_station,last(value) from watering group by id_station;')
+  .then(function(result){
+    updatedValues = JSON.stringify(result);
+
+    let previous = JSON.parse(controlablesCurrentStates);
+    let current = JSON.parse(updatedValues);
+
+    // console.log("on avait : " + controlablesCurrentStates);
+    // console.log("on a : " + updatedValues);
+    // console.log(current[1]["last"] != previous[1]["last"]);
+    controlablesCurrentStates = updatedValues;
+    // console.log("now : " + controlablesCurrentStates);
+
+    for (let station = 0; station < previous.length; station++){
+      // updatedValues.hasOwnProperty(name)
+      if (current[station]["last"] != previous[station]["last"]){
+        modifiedControlables.push("id_station" + previous[station]["id_station"]);
+      }
+    }
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
+}
+
+function daemon(){
+
+  getControlableSystemsState();
+  var data = modifiedControlables;
+
+  if (modifiedControlables.length > 0) {
+    for (let i=0; i<connections.length; i++){
+      sseSend(connections[i], data);
+    }
+  }
+
+  modifiedControlables = [];
+}
+
+app.get('/irrigation', function(req, res){
+  influx.query('select id_station,last(value) from watering group by id_station;')
+  .then(function(result){
     res.json(JSON.stringify(result));
     res.end();
   })

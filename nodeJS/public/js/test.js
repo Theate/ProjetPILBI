@@ -1,6 +1,8 @@
+var controlablesNumber;
 $.get('irrigation', function(data, status){
   json = JSON.parse(data);
-  for (let i=0; i<json.length; i++){
+  controlablesNumber = json.length;
+  for (let i=0; i<controlablesNumber; i++){
     var div = "<div class='controlableSystems'><div class='controlableSystem'>";
     var name = "<div style='float:left;width:60%;text-align:right; " +
     "padding-right:2%'>Irrigation sur station " + json[i].id_station + "</div>";
@@ -13,7 +15,7 @@ $.get('irrigation', function(data, status){
     var toPrint = div + name + checkbox + state + close;
     document.getElementById("controlableSystemsArea").innerHTML += toPrint;
   }
-  for (let i=0; i<json.length; i++){
+  for (let i=0; i<controlablesNumber; i++){
 
     if (json[i].last == 1) {
       document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
@@ -35,12 +37,6 @@ $.get('irrigation', function(data, status){
     });
   }
 });
-// $('#startSC').click(function() {
-//   $.post('start', function(){
-//     document.getElementById("message").innerHTML = 'Systèmes Contrôlables arrêtés!';
-//     document.getElementById("message").style.display = "block";
-//   });
-// })
 
 var showDetails = false;
 $('.bouttonTemperature').mousedown(function (e) {
@@ -168,3 +164,35 @@ $( document ).ready(function() {
       onGraphSelected('humidity', 'image2');
     });
 });
+
+if (!!window.EventSource) {
+  var source = new EventSource('/stream');
+
+  source.addEventListener('message', function(e) {
+    if (e.data.includes("id_station")) {
+      for (let i=1; i <= controlablesNumber; i++) {
+        if (e.data.includes("id_station" + i)) {
+          if (document.getElementById("station" + i).checked) {
+            document.getElementById("comment" + i).innerHTML = "";
+            document.getElementById("station" + i).checked = false;
+          } else {
+            document.getElementById("comment" + i).innerHTML = "Actif";
+            document.getElementById("station" + i).checked = true;
+          }
+        }
+      }
+    } else {
+      console.log(e.data);
+    }
+  }, false)
+
+  source.addEventListener('open', function(e) {
+    console.log("Connection was opened")
+  }, false)
+
+  source.addEventListener('error', function(e) {
+    if (e.readyState == EventSource.CLOSED) {
+      console.log("Connection was closed")
+    }
+  }, false)
+}
