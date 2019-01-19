@@ -1,42 +1,114 @@
 var controlablesNumber;
-$.get('irrigation', function(data, status){
-  json = JSON.parse(data);
-  controlablesNumber = json.length;
-  for (let i=0; i<controlablesNumber; i++){
-    var div = "<div class='controlableSystems'><div class='controlableSystem'>";
-    var name = "<div style='float:left;width:60%;text-align:right; " +
-    "padding-right:2%'>Irrigation sur station " + json[i].id_station + "</div>";
-    var checkbox = '<label class="switch"><input id="station' +
-    json[i].id_station + '" type="checkbox">' +
-    '<div class="slider round"></div></label>';
-    var state = "<div class='comment' id='comment" + json[i].id_station + "'></div>";
-    var close = "</div></div><br />";
 
-    var toPrint = div + name + checkbox + state + close;
-    document.getElementById("controlableSystemsArea").innerHTML += toPrint;
-  }
-  for (let i=0; i<controlablesNumber; i++){
+var line = "<div class='controlableSystems'>";
+var sublineHead = "<div id='controlableSystemHead'>";
+var texte = "Selectionner un mode de fonctionnement";
+var divManuel = "<div style='float:left;width:42%;text-align:right;padding-right:4%'>";
+var divAuto = "<div style='float:left;width:40%;text-align:left;padding-left:4%'>";
+var manuel = "Manuel</div>";
+var auto = "Automatique</div>";
+var selectMode = '<label class="switch"><input id="mode" type="checkbox">' +
+'<div class="slider round"></div></label>';
+var close = "</div></div>";
 
-    if (json[i].last == 1) {
-      document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
-      document.getElementById("station" + json[i].id_station).checked = true;
+function myControlableSystems() {
+  // Affiche le selecteur du mode des systèmes controlables
+  var mode = line + texte + sublineHead + divManuel + manuel + selectMode +
+  divAuto + auto + "<br />" + close;
+  document.getElementById("controlableSystemsArea").innerHTML += mode;
+
+  // affiche le mode actuel
+  getSCMode();
+
+  // affiche tous les systèmes controlables et leurs états de fonctionnement
+  printSC();
+}
+
+function getSCMode() {
+  $.get('mode', function(data, status){
+    if (data == "1"){ // mode automatique
+      document.getElementById("mode").checked = true;
+    }
+    // on affiche le selecteur du mode une fois sûr de son état actuel
+    document.getElementById("controlableSystemHead").style.display = "block";
+  });
+}
+
+function printSC() {
+  var sublineEngine = "<div class='controlableSystem'>";
+  var system = "<div style='float:left;width:64%;text-align:right;padding-right:4%'>";
+
+  $.get('irrigation', function(data, status){
+    // give last state of each controlable system
+    json = JSON.parse(data);
+    controlablesNumber = json.length;
+
+    // print each contolable systems selector
+    for (let i=0; i<controlablesNumber; i++){
+      var name = "Irrigation sur station " + json[i].id_station;
+      var checkbox = '</div><label class="switch"><input id="station' +
+      json[i].id_station + '" type="checkbox">' + '<div class="slider round"></div></label>';
+      var state = "<div class='comment' id='comment" + json[i].id_station + "'>Inactif</div>";
+      var toPrint = line + sublineEngine + system + name + checkbox + state + close;
+      document.getElementById("controlableSystemsArea").innerHTML += toPrint;
     }
 
-    $("#station" + json[i].id_station).click(function(){
-      if (document.getElementById("station" + json[i].id_station).checked){
-        $.post("startWatering", {value:json[i].id_station}, function(data, status){
-          // console.log("station " + json[i].id_station + " démarrée");
-          document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
-        });
+    var display = "inline-block";
+    var margin = "72%";
+    if (document.getElementById("mode").checked) {
+      display = "none";
+      margin = "65%";
+    }
+    for (let i=0; i<controlablesNumber; i++){
+
+      // if we are in manual mode, we do not display controlable systems selectors
+      document.getElementById("station" + json[i].id_station).style.display = display;
+      document.getElementById("comment" + json[i].id_station).style.marginLeft = margin;
+
+      // if controlable system is on, we put it on in the UI too
+      if (json[i].last == 1) {
+        document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
+        document.getElementById("comment" + json[i].id_station).style.color = "green";
+        document.getElementById("station" + json[i].id_station).checked = true;
+      }
+
+      // add javascript to each controlable systems selector
+      $("#station" + json[i].id_station).click(function(){
+        if (document.getElementById("station" + json[i].id_station).checked){
+          $.post("startWatering", {value:json[i].id_station}, function(data, status){
+            // console.log("station " + json[i].id_station + " démarrée");
+            document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
+            document.getElementById("comment" + json[i].id_station).style.color = "green";
+          });
+        } else {
+          $.post("stopWatering", {value:json[i].id_station}, function(data, status){
+            // console.log("station " + json[i].id_station + " arrêtée");
+            document.getElementById("comment" + json[i].id_station).innerHTML = "Inactif";
+            document.getElementById("comment" + json[i].id_station).style.color = "red";
+          });
+        }
+      });
+    }
+    // add javascript to selector
+    $("#mode").click(function(){
+      if (document.getElementById("mode").checked){
+        for (let i=1; i<=controlablesNumber; i++) {
+          document.getElementById("station" + i).style.display = "none";
+          document.getElementById("comment" + i).style.marginLeft = "65%";
+        }
+        $.post("changeMode", {value:1});
       } else {
-        $.post("stopWatering", {value:json[i].id_station}, function(data, status){
-          // console.log("station " + json[i].id_station + " arrêtée");
-          document.getElementById("comment" + json[i].id_station).innerHTML = "";
-        });
+        for (let i=1; i<=controlablesNumber; i++) {
+          document.getElementById("station" + i).style.display = "inline-block";
+          document.getElementById("comment" + i).style.marginLeft = "72%";
+        }
+        $.post("changeMode", {value:0});
       }
     });
-  }
-});
+  });
+}
+
+myControlableSystems();
 
 var showDetails = false;
 $('.bouttonTemperature').mousedown(function (e) {
@@ -173,10 +245,12 @@ if (!!window.EventSource) {
       for (let i=1; i <= controlablesNumber; i++) {
         if (e.data.includes("id_station" + i)) {
           if (document.getElementById("station" + i).checked) {
-            document.getElementById("comment" + i).innerHTML = "";
+            document.getElementById("comment" + i).innerHTML = "Inactif";
+            document.getElementById("comment" + i).style.color = "red";
             document.getElementById("station" + i).checked = false;
           } else {
             document.getElementById("comment" + i).innerHTML = "Actif";
+            document.getElementById("comment" + i).style.color = "green";
             document.getElementById("station" + i).checked = true;
           }
         }

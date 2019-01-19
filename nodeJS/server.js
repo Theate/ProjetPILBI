@@ -237,6 +237,31 @@ app.get('/irrigation', function(req, res){
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
+app.get('/mode', function(req, res){
+  influx.query('select last(value) from mode;')
+  .then(function(result){
+    var mode = JSON.parse(JSON.stringify(result))[0].last;
+    res.json(JSON.stringify(mode));
+    res.end();
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
+});
+
+app.post('/changeMode', function(req, res){
+  var mode = req.body.value;
+  influx.writePoints([
+    {
+      measurement:'perf',
+      tags: { tag:'mode' },
+      fields: { value:mode },
+    }
+  ])
+  .then(function(result){
+    res.json("{'success':1}");
+    res.end();
+  })
+  .catch(error => {console.error(`ERROR : ${err.stack}`)});
+});
 /***********************
   Démarrage du serveur
 ************************/

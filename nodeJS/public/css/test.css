@@ -103,6 +103,43 @@
 .submitButton:active{
   background-color: rgba(245,245,250,0.7);
 }
+.popupContent {
+  text-align:right;
+  padding-bottom:10%;
+}
+.popupTextContent {
+  text-align: right;
+  float: left;
+  width: 35%;
+}
+.popupInput {
+  text-align: left;
+  padding-left: 4%;
+  float:left;
+  width: 65%;
+}
+.popupSelect {
+  text-align: left;
+  padding-left: 4%;
+  float:left;
+  width: 65%;
+}
+.popupInputContent {
+  width: 70%;
+}
+.popupSelectContent {
+  width: 70%
+}
+.headTuile {
+  font-size: 0.9vw;
+}
+.systemTitle {
+  font-size: 1.2vw;
+}
+.systemeControlables {
+  padding-top: 4%;
+  font-size: 2vw;
+}
 .switch input {
   opacity: 0;
   width: 0;
@@ -157,59 +194,35 @@ input:checked + .slider:before {
   transform: translateX(180%);
 }
 .controlableSystems {
+  text-align: center;
+  font-style: italic;
   width: 100%;
+  font-size: 1.5vw;
 }
 .controlableSystem {
+  font-style: normal;
   width: 75%;
   margin: 0 auto;
   font-size: 2vw;
+  padding-bottom: 2%;
+}
+#controlableSystemHead {
+  display: none;
+  font-style: normal;
+  width: 75%;
+  margin: 0 auto;
+  font-size: 2vw;
+  padding-bottom: 4%;
 }
 .comment {
-  float:left;
+  /* top: 80%; */
   width:15%;
-  color: green;
+  color: red;
   text-align: left;
-  margin: auto;
+  margin-left: 72%;
   text-transform: uppercase;
-  padding-left: 2%;
-}
-@media only screen and (min-width:993px) {
-  .popupContent {
-    text-align:right;
-    padding-bottom:10%;
-  }
-  .popupTextContent {
-    text-align: right;
-    float: left;
-    width: 35%;
-  }
-  .popupInput {
-    text-align: left;
-    padding-left: 4%;
-    float:left;
-    width: 65%;
-  }
-  .popupSelect {
-    text-align: left;
-    padding-left: 4%;
-    float:left;
-    width: 65%;
-  }
-  .popupInputContent {
-    width: 70%;
-  }
-  .popupSelectContent {
-    width: 70%
-  }
-  .headTuile {
-    font-size: 0.9vw;
-  }
-  .systemTitle {
-    font-size: 1.2vw;
-  }
-  .systemeControlables {
-    padding-top: 4%;
-  }
+  font-size: 1vw;
+  padding-top: 1.5%;
 }
 @media only screen and (max-width:993px) {
   .popupContent {
@@ -297,8 +310,18 @@ input:checked + .slider:before {
     -ms-transform: translateX(130%);
     transform: translateX(130%);
   }
+  .controlableSystems {
+    font-size: 2vw;
+  }
   .controlableSystem {
     font-size: 3vw;
+  }
+  #controlableSystemHead {
+    font-size: 3vw;
+  }
+  .comment {
+    font-size: 2vw;
+    padding-top: 1.4%;
   }
 }
 .sensorGraph {
