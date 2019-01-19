@@ -1,18 +1,41 @@
-$(window).on('load', function () {
-    $("#close").click(function(){
-      w3_close();
+var controlablesNumber;
+$.get('irrigation', function(data, status){
+  json = JSON.parse(data);
+  controlablesNumber = json.length;
+  for (let i=0; i<controlablesNumber; i++){
+    var div = "<div class='controlableSystems'><div class='controlableSystem'>";
+    var name = "<div style='float:left;width:60%;text-align:right; " +
+    "padding-right:2%'>Irrigation sur station " + json[i].id_station + "</div>";
+    var checkbox = '<label class="switch"><input id="station' +
+    json[i].id_station + '" type="checkbox">' +
+    '<div class="slider round"></div></label>';
+    var state = "<div class='comment' id='comment" + json[i].id_station + "'></div>";
+    var close = "</div></div><br />";
+
+    var toPrint = div + name + checkbox + state + close;
+    document.getElementById("controlableSystemsArea").innerHTML += toPrint;
+  }
+  for (let i=0; i<controlablesNumber; i++){
+
+    if (json[i].last == 1) {
+      document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
+      document.getElementById("station" + json[i].id_station).checked = true;
+    }
+
+    $("#station" + json[i].id_station).click(function(){
+      if (document.getElementById("station" + json[i].id_station).checked){
+        $.post("startWatering", {value:json[i].id_station}, function(data, status){
+          // console.log("station " + json[i].id_station + " démarrée");
+          document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
+        });
+      } else {
+        $.post("stopWatering", {value:json[i].id_station}, function(data, status){
+          // console.log("station " + json[i].id_station + " arrêtée");
+          document.getElementById("comment" + json[i].id_station).innerHTML = "";
+        });
+      }
     });
-    $(".popupSettingsOppugno").click(function(){
-      w3_close();
-      $('.popupSettings').show();
-    });
-    $(".popupWeatherOppugno").click(function(){
-      w3_close();
-      $('.popupWeather').show();
-    });
-    $('.popupCloseButton').click(function(){
-      $('.popupBackground').hide();
-    });
+  }
 });
 
 var showDetails = false;
@@ -37,6 +60,26 @@ $('.bouttonHumidite').mousedown(function (e) {
     document.getElementById("details2").style.display = "block";
     showDetails2 = true;
   }
+});
+
+$('.boutonDeconnection').mousedown(function (e) {
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+  location.reload();
+});
+
+$("#close").click(function(){
+  w3_close();
+});
+$(".popupSettingsOppugno").click(function(){
+  w3_close();
+  $('.popupSettings').show();
+});
+$(".popupWeatherOppugno").click(function(){
+  w3_close();
+  $('.popupWeather').show();
+});
+$('.popupCloseButton').click(function(){
+  $('.popupBackground').hide();
 });
 
 var item = "";
@@ -78,15 +121,17 @@ function generateGrafanaUrl(start, end){
   return url
 }
 
-// Gestion evenement modification du select de la temperature
-function onTemperatureSelected(){
+
+// Gestion evenement modification du select de l'humidité ou temperature
+function onGraphSelected(type, ref){
+
   // On récupère les valeurs des différents select.
-  let v1 = $('select#temperatureFromWeek').val(); // valeur du select
-  let v2 = $('select#temperatureFromDay').val(); // valeur du select
-  let v3 = $('select#temperatureFromHour').val(); // valeur du select
-  let v4 = $('select#temperatureToWeek').val(); // valeur du select
-  let v5 = $('select#temperatureToDay').val(); // valeur du select
-  let v6 = $('select#temperatureToHour').val(); // valeur du select
+  let v1 = $('select#' + type + 'FromWeek').val(); // valeur du select
+  let v2 = $('select#' + type + 'FromDay').val(); // valeur du select
+  let v3 = $('select#' + type + 'FromHour').val(); // valeur du select
+  let v4 = $('select#' + type + 'ToWeek').val(); // valeur du select
+  let v5 = $('select#' + type + 'ToDay').val(); // valeur du select
+  let v6 = $('select#' + type + 'ToHour').val(); // valeur du select
 
   // On calcul les temps en heure donnés par l'utilisateur
   //    start : nombre d'heure dans le passé
@@ -94,65 +139,60 @@ function onTemperatureSelected(){
   //    end : nombre d'heure dans le passé devant être inférieur à 'start'
   let end = (parseInt(v4) * 7 * 24) + (parseInt(v5) * 24) + parseInt(v6);
 
+  // console.log('given start date : ', start);
+  // console.log('given end date : ', end);
   // Si end > start, on inverse les deux
   if (end > start) {
-    console.log('given start date : ', start);
-    console.log('given end date : ', end);
     let temp = start;
     start = end;
     end = temp;
-    console.log('switch : start=', start, ', end=', end);
+    // console.log('switch : start=', start, ', end=', end);
   }
 
   // On update le Graphe
   let url = generateGrafanaUrl(start, end);
-  document.getElementById("image1").setAttribute("src", url);
-}
-
-// Gestion evenement modification du select de l'humidité
-function onHumiditySelected(){
-  // On récupère les valeurs des différents select.
-  let v1 = $('select#humidityFromWeek').val(); // valeur du select
-  let v2 = $('select#humidityFromDay').val(); // valeur du select
-  let v3 = $('select#humidityFromHour').val(); // valeur du select
-  let v4 = $('select#humidityToWeek').val(); // valeur du select
-  let v5 = $('select#humidityToDay').val(); // valeur du select
-  let v6 = $('select#humidityToHour').val(); // valeur du select
-
-  // On calcul les temps en heure donnés par l'utilisateur
-  //    start : nombre d'heure dans le passé
-  let start = (parseInt(v1) * 7 * 24) + (parseInt(v2) * 24) + parseInt(v3);
-  //    end : nombre d'heure dans le passé devant être inférieur à 'start'
-  let end = (parseInt(v4) * 7 * 24) + (parseInt(v5) * 24) + parseInt(v6);
-
-  // Si end > start, on inverse les deux
-  if (end > start) {
-    console.log('given start date : ', start);
-    console.log('given end date : ', end);
-    let temp = start;
-    start = end;
-    end = temp;
-    console.log('switch : start=', start, ', end=', end);
-  }
-
-  // On update le Graphe
-  let url = generateGrafanaUrl(start, end);
-  document.getElementById("image2").setAttribute("src", url);
+  document.getElementById(ref).setAttribute("src", "");
+  document.getElementById(ref).setAttribute("src", url);
 }
 
 $( document ).ready(function() {
     // On effectue une opération quand le select est modifié
-    $('#temperatureFromWeek').on('change', onTemperatureSelected);
-    $('#temperatureFromDay').on('change', onTemperatureSelected);
-    $('#temperatureFromHour').on('change', onTemperatureSelected);
-    $('#temperatureToWeek').on('change', onTemperatureSelected);
-    $('#temperatureToDay').on('change', onTemperatureSelected);
-    $('#temperatureToHour').on('change', onTemperatureSelected);
-
-    $('#humidityFromWeek').on('change', onHumiditySelected);
-    $('#humidityFromDay').on('change', onHumiditySelected);
-    $('#humidityFromHour').on('change', onHumiditySelected);
-    $('#humidityToWeek').on('change', onHumiditySelected);
-    $('#humidityToDay').on('change', onHumiditySelected);
-    $('#humidityToHour').on('change', onHumiditySelected);
+    $('#submitButtonTemperature').click(function(){
+      onGraphSelected('temperature', 'image1');
+    });
+    $('#submitButtonHumidity').click(function(){
+      onGraphSelected('humidity', 'image2');
+    });
 });
+
+if (!!window.EventSource) {
+  var source = new EventSource('/stream');
+
+  source.addEventListener('message', function(e) {
+    if (e.data.includes("id_station")) {
+      for (let i=1; i <= controlablesNumber; i++) {
+        if (e.data.includes("id_station" + i)) {
+          if (document.getElementById("station" + i).checked) {
+            document.getElementById("comment" + i).innerHTML = "";
+            document.getElementById("station" + i).checked = false;
+          } else {
+            document.getElementById("comment" + i).innerHTML = "Actif";
+            document.getElementById("station" + i).checked = true;
+          }
+        }
+      }
+    } else {
+      console.log(e.data);
+    }
+  }, false)
+
+  source.addEventListener('open', function(e) {
+    console.log("Connection was opened")
+  }, false)
+
+  source.addEventListener('error', function(e) {
+    if (e.readyState == EventSource.CLOSED) {
+      console.log("Connection was closed")
+    }
+  }, false)
+}
