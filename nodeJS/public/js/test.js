@@ -178,24 +178,25 @@ for (let i = 1; i<=23; i++){
 }
 
 // Generate url grafana to get graphics with the given start and end date
-function generateGrafanaUrl(start, end){
+function generateGrafanaUrl(start, end, id_graph){
   /*
   http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/
   test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00
   */
-  let url1 = 'http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/test-dashboard?panelId=4&orgId=1&';
+  let url1 = 'http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&';
   let url2 = '&width=1000&height=500&tz=UTC%2B01%3A00';
 
   let from = "from=now-" + start + "h&";
   let to = "to=now-" + end + "h&";
+  let panel = "panelId=" + id_graph + "&";
 
-  let url = url1 + from + to + url2;
+  let url = url1 + panel + from + to + url2;
   return url
 }
 
 
 // Gestion evenement modification du select de l'humidité ou temperature
-function onGraphSelected(type, ref){
+function onGraphSelected(type, ref, id_graph){
 
   // On récupère les valeurs des différents select.
   let v1 = $('select#' + type + 'FromWeek').val(); // valeur du select
@@ -222,7 +223,7 @@ function onGraphSelected(type, ref){
   }
 
   // On update le Graphe
-  let url = generateGrafanaUrl(start, end);
+  let url = generateGrafanaUrl(start, end, id_graph);
   document.getElementById(ref).setAttribute("src", "");
   document.getElementById(ref).setAttribute("src", url);
 }
@@ -230,10 +231,10 @@ function onGraphSelected(type, ref){
 $( document ).ready(function() {
     // On effectue une opération quand le select est modifié
     $('#submitButtonTemperature').click(function(){
-      onGraphSelected('temperature', 'image1');
+      onGraphSelected('temperature', 'image1', '6');
     });
     $('#submitButtonHumidity').click(function(){
-      onGraphSelected('humidity', 'image2');
+      onGraphSelected('humidity', 'image2', '2');
     });
 });
 
