@@ -2,6 +2,11 @@
 
 import paho.mqtt.client as mqtt
 import time
+import serial
+
+print("Starting...")
+ser = serial.Serial('COM10', 9600, timeout=0)
+print("Serial connected")
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -27,11 +32,29 @@ PORT = 8883
 ##### connection settings
 client.tls_set(ca_certs="ca.crt")
 client.username_pw_set(MQTTUSER, MQTTPASSWORD)
+print("MQTT initialized")
 client.connect(BROKER, port=PORT, keepalive=60, )
+print("MQTT connected")
+
+def publish_sensor_data():
+    payload = ""
+    try:
+        line = ser.readline().decode().replace("\r\n", "")
+        if line != "":
+            payload = line
+            print("Fetched: ", payload)
+    except ser.SerialTimeoutException:
+        print('Data could not be read from serial port')
+    if payload != "":
+        client.publish("application/64", payload)
+        print("Published: ", payload)
+
 
 while True:
-    client.publish("application/64", "PAYLOAD")
-    time.sleep(2)
+    print("Main loop")
+    publish_sensor_data()
+    print("sleeping...")
+    time.sleep(30)
     
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.
