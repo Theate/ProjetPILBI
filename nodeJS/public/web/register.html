@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SmartKoulak</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="css/login.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+</head>
+<body class="w3-light-grey">
+
+<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+    <a href="/" class="w3-bar-item w3-right">SmartKoulak</a>
+</div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-top:43px;">
+
+    <div class="tuileLogIn">
+      <div class="logInContent">
+        <!-- Header -->
+        <div class="logInTitle">
+            Création de compte
+        </div>
+
+        <div class="logInComment">
+          <%= message %>
+        </div>
+        <br />
+
+        <form action="register" method="POST">
+            <div class="leftText">
+              Login :
+            </div>
+            <div class="rightText">
+              <input class="input" name="login" type="text"><br>
+            </div>
+            <div style="clear:both"></div>
+            <div class="leftText">
+              Mot de passe :
+            </div>
+            <div class="rightText">
+              <input class="input" name="mdp" type="password"><br>
+            </div>
+            <div style="clear:both"></div>
+            <div class="leftText">
+              Confirmer le mot de passe :
+            </div>
+            <div class="rightText">
+              <input class="input" name="mdpconf" type="password"><br>
+            </div>
+            <br />
+            <div style="clear:both">
+            <input type="submit" value="Soumettre">
+            </div>
+            <br />
+            <a href="/">Retour à l'application</a>
+        </form>
+        <br />
+      </div>
+    </div>
+</div>
+
+</body>
+</html>

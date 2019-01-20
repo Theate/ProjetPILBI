@@ -45,7 +45,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Capteurs</a>
     <a href="#systemeControlables" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  Systèmes contrôlables</a>
     <a href="#" class="w3-bar-item w3-button w3-padding popupWeatherOppugno"><i class="fa fa-bullseye fa-fw"></i>  Weather</a> <!--TODO add link meteociel -->
-    <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Settings</a>
+    <% if (username == 'admin') { %>
+      <!-- <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Gestion des comptes</a> -->
+      <a href="/register" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Gestion des comptes</a>
+    <% } %>
     <a href="#" class="w3-bar-item w3-button w3-padding boutonDeconnection"><i class="fa fa-remove fa-fw"></i>  Déconnexion</a><br><br>
   </div>
   <!-- <script charset='UTF-8' src='http://www.meteofrance.com/mf3-rpc-portlet/rest/vignettepartenaire/312690/type/VILLE_FRANCE/size/PORTRAIT_VIGNETTE' type='text/javascript'></script> -->

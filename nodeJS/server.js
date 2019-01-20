@@ -176,6 +176,51 @@ app.post('/login', function(req, res){
   }
 });
 
+app.get('/register', function(req, res) {
+  if (req.cookies.token) {
+    jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
+      if (error || authorizedData.username != "admin") {
+        res.redirect('/');
+      } else {
+        res.render('register.html', {message: 'Remplissez les champs pour ajouter un compte'});
+      }
+    })
+  } else {
+    res.redirect('/');
+  }
+});
+
+app.post('/register', function(req, res) {
+  if (req.cookies.token) {
+    jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
+      if (error || authorizedData.username != "admin") {
+        res.redirect('/');
+      } else {
+        let username = req.body.login
+        let password = req.body.mdp
+        let passwordConf = req.body.mdpconf
+        if (password != passwordConf) {
+          res.render('register.html', {message: 'Erreur: les deux mots de passe ne correspondent pas'});
+        } else {
+          sqlite.get("SELECT * FROM users WHERE username == ?", [username], (error, row) => {
+            if (row) {
+              res.render('register.html', {message: 'Erreur: il existe déjà un compte avec ce login'});
+            } else {
+              bcrypt.hash(password, 10, function(err, hash) {
+                sqlite.run("INSERT INTO \"users\" (\"username\", \"password\") VALUES (?, ?)", [username, hash], (error) => {
+                  res.render('register.html', {message: 'Compte créé avec succès'});
+                })
+              });
+            }
+          })
+        }
+      }
+    })
+  } else {
+    res.redirect('/');
+  }
+});
+
 var connections = []
 var controlablesCurrentStates = {};
 var modifiedControlables = [];
