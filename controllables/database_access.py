@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 from influxdb import InfluxDBClient
+from time import sleep
+
+sleep_time = 0.1
 
 class DBConnexion:
     def __init__(self, host, port):
@@ -12,12 +15,14 @@ class DBConnexion:
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         myquery = "SELECT last(value), id_station FROM %s GROUP BY id_station" % controllable_system
         result_set = self.client.query(myquery)
+        sleep(sleep_time)
         return result_set
 
     def get_state(self, controllable_system, id_station):
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         myquery = "SELECT last(value), id_station FROM %s GROUP BY id_station" % controllable_system
         result_set = self.client.query(myquery)
+        sleep(sleep_time)
         for mypoint in result_set.get_points():
             if mypoint['id_station'] == id_station:
                 return mypoint['last']
@@ -26,6 +31,7 @@ class DBConnexion:
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         myquery = "SELECT last(value) FROM freeze"
         result_set = self.client.query(myquery)
+        sleep(sleep_time)
         for mypoint in result_set.get_points():
             return mypoint['last']
 
@@ -33,10 +39,12 @@ class DBConnexion:
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         myrequest = [{"measurement": controllable_system, "tags": {"id_station": id_station}, "fields": {"value": float(new_state)}}]
         self.client.write_points(myrequest)
+        sleep(sleep_time)
 
     def get_list_systems(self):
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         result_set = self.client.query('SHOW MEASUREMENTS')
+        sleep(sleep_time)
         output = []
         for point in result_set:
             for dict in point:
@@ -49,6 +57,7 @@ class DBConnexion:
         self.client.switch_database('SENSOR_DATA')
         myquery = "SELECT last(value), id_station FROM %s WHERE time > now() - %is GROUP BY id_station" % (measurement, seconds_time_limit)
         result_set = self.client.query(myquery)
+        sleep(sleep_time)
         for mypoint in result_set.get_points():
             if mypoint['id_station'] == id_station:
                 return mypoint['last']
@@ -57,5 +66,6 @@ class DBConnexion:
         self.client.switch_database('CONTROLLABLE_SYSTEMS')
         myquery = "SELECT last(value) FROM mode"
         result_set = self.client.query(myquery)
+        sleep(sleep_time)
         for mypoint in result_set.get_points():
             return mypoint['last']
