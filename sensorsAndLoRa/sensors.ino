@@ -51,29 +51,14 @@ float read_air_temperature() {
   return t;
 }
 
+String get_payload() {
+    return String(read_soil_humidity()) + "/" +
+           String(read_air_humidity()) + "/" +
+           String(read_air_temperature()) + "/" +
+           String(read_brightness());
+}
+
 void loop() {
-  delay(2000);
-  
-  debugSerial.print("Soil humidity [0-1023]: ");
-  debugSerial.println(read_soil_humidity());
-
-  float t = read_air_temperature();
-  float h = read_air_humidity();
-  float hic = 0;
-  if (!isnan(t) && !isnan(h)) {
-    hic = dht.computeHeatIndex(t, h, false);
-  }
-
-  debugSerial.print("Humidity (float): ");
-  debugSerial.print(h);
-  debugSerial.print(" %\t");
-  debugSerial.print("Temperature (float): ");
-  debugSerial.print(t);
-  debugSerial.print(" *C\t");
-  debugSerial.print("Temperature index (float): ");
-  debugSerial.print(hic);
-  debugSerial.println(" *C ");
-
-  debugSerial.print("Brightness [0-1023]: ");
-  debugSerial.println(read_brightness());
+  delay(60000);
+  debugSerial.print(get_payload());
 }
