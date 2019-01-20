@@ -261,6 +261,66 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
   </div>
 
+  <!-- Tuile Luminosité -->
+  <div class="sensorGraph">
+    <div class="sensorGraphImage">
+      <div class="tuile bouton">
+        <div class="headTuile bouttonLuminosite">
+          <p class="systemTitle"><B>Evolution de la luminosité</B></p>
+          <p>
+            Graphique représentant l'évolution de la luminosité
+            de la surface agricole. A l'aide du selecteur ci-dessous il est possible
+            de modifier l'intervalle temporel étudié.
+          </p>
+        </div>
+
+        <div class="graphique" id="details3">
+          <div class="selecteur">
+            <div class="from">
+              <div class="textSelector">
+                De :
+              </div>
+              <div class=selector>
+                <select style="width:30%" id="luminosityFromWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="luminosityFromDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="luminosityFromHour">
+                  <option value="0" selected> Heure</option>
+                </select>
+              </div>
+            </div>
+            <div class="to">
+              <div class="textSelector">
+                A :
+              </div>
+              <div class=selector>
+                <select style="width:30%" id="luminosityToWeek">
+                  <option value="0" selected>Semaine</option>
+                </select>
+                <select style="width:30%" id="luminosityToDay">
+                  <option value="0" selected>Jour</option>
+                </select>
+                <select style="width:30%" id="luminosityToHour">
+                  <option value="0" selected>Heure</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="submitSelector">
+            <div class="submitButton" id="submitButtonLuminosity">submit</div>
+          </div>
+          <img class="image" id="image3" alt="Graphe en cours de chargement..."
+          src="http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&panelId=4&from=now-24h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
+          <!-- <canvas id="radar"></canvas> -->
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+
 	<!-- <img src="http://redtacos.ddns.net:3000/render/d-solo/jPN0ozzRk/dashbord-242?orgId=1&panelId=2&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00"> -->
 
   <!-- Header -->

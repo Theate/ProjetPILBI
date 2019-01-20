@@ -134,6 +134,18 @@ $('.bouttonHumidite').mousedown(function (e) {
   }
 });
 
+var showDetails3 = false;
+$('.bouttonLuminosity').mousedown(function (e) {
+  if (showDetails3) {
+    document.getElementById("details3").style.display = "none";
+    showDetails3 = false;
+  }
+  else {
+    document.getElementById("details3").style.display = "block";
+    showDetails3 = true;
+  }
+});
+
 $('.boutonDeconnection').mousedown(function (e) {
   document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
   location.reload();
@@ -161,6 +173,8 @@ for (let i = 1; i<=52; i++){
   $(item).appendTo("#temperatureToWeek");
   $(item).appendTo("#humidityFromWeek");
   $(item).appendTo("#humidityToWeek");
+  $(item).appendTo("#luminosityFromWeek");
+  $(item).appendTo("#luminosityToWeek");
 }
 for (let i = 1; i<=7; i++){
   item = '<option value="'+i+'">'+i+'</option>';
@@ -168,6 +182,8 @@ for (let i = 1; i<=7; i++){
   $(item).appendTo("#temperatureToDay");
   $(item).appendTo("#humidityFromDay");
   $(item).appendTo("#humidityToDay");
+  $(item).appendTo("#luminosityFromDay");
+  $(item).appendTo("#luminosityToDay");
 }
 for (let i = 1; i<=23; i++){
   item = '<option value="'+i+'">'+i+'</option>';
@@ -175,6 +191,8 @@ for (let i = 1; i<=23; i++){
   $(item).appendTo("#temperatureToHour");
   $(item).appendTo("#humidityFromHour");
   $(item).appendTo("#humidityToHour");
+  $(item).appendTo("#luminosityFromHour");
+  $(item).appendTo("#luminosityToHour");
 }
 
 // Generate url grafana to get graphics with the given start and end date
@@ -235,6 +253,9 @@ $( document ).ready(function() {
     });
     $('#submitButtonHumidity').click(function(){
       onGraphSelected('humidity', 'image2', '2');
+    });
+    $('#submitButtonLuminosity').click(function(){
+      onGraphSelected('luminosity', 'image3', '4');
     });
 });
 
