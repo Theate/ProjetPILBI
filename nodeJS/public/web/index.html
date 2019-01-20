@@ -372,7 +372,15 @@ function w3_close() {
   mySidebar.style.display = "none";
   overlayBg.style.display = "none";
 }
+
 </script>
+
+<% if (locals.badLoginRename) { %>
+  <script> 
+    alert("Ce login est déjà pris, essayez-en un autre")
+  </script>
+<% } %>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
 <!-- <script src="js/graph.js"></script> -->

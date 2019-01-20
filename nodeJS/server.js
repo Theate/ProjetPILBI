@@ -61,14 +61,22 @@ app.post('/settings', function(req, res) {
       if (error) {
         res.redirect('/');
       } else {
+        if (pseudo == "") {
+          pseudo = authorizedData.username
+        }
         sqlite.get("SELECT * FROM users WHERE username == ?", [pseudo], (error2, row) => {
-          if (row) {
-            res.redirect('/');
+          var original = authorizedData.username;
+          if (row && pseudo !== original) {
+            res.render('index.html', {username: authorizedData.username, isAdmin: authorizedData.isAdmin, badLoginRename: true});
           } else {
-            var original = authorizedData.username;
-            bcrypt.hash(mdp, 10, function(err, hash) {
-              sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
-            });
+            
+            if (mdp == "") {
+              sqlite.run("UPDATE \"users\" SET \"username\" = ? WHERE \"username\" = ?", [pseudo, original]);
+            } else {
+              bcrypt.hash(mdp, 10, function(err, hash) {
+                sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
+              });
+            }
             res.clearCookie("token");
             res.render('login.html', {message: "Identifiants changés avec succès"});
           }
