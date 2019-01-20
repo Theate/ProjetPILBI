@@ -59,18 +59,24 @@ app.post('/settings', function(req, res) {
   if (req.cookies.token) {
     jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
       if (error) {
-        res.redirect('/').end();
+        res.redirect('/');
       } else {
-        var original = authorizedData.username;
-        bcrypt.hash(mdp, 10, function(err, hash) {
-          sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
+        sqlite.get("SELECT * FROM users WHERE username == ?", [pseudo], (error2, row) => {
+          if (row) {
+            res.redirect('/');
+          } else {
+            var original = authorizedData.username;
+            bcrypt.hash(mdp, 10, function(err, hash) {
+              sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
+            });
+            res.clearCookie("token");
+            res.render('login.html', {message: "Identifiants changés avec succès"});
+          }
         });
-        res.clearCookie("token");
-        res.render('login.html', {message: "Identifiants changés avec succès"});
       }
     })
   } else {
-    res.redirect('/').end();
+    res.redirect('/');
   }
 });
 
