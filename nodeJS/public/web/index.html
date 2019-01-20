@@ -26,11 +26,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <div class="w3-col s4">
       <img src="/images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
     </div>
-    <div class="w3-col s8 w3-bar">
+    <div class="w3-col s8 w3-bar" style="text-align: center; margin: 0 auto">
       <span>Welcome, <strong><%= username %></strong></span><br>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a> <!--TODO add link mail-->
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a> <!--TODO add on sait pas ce que c'est-->
-      <a href="#" class="w3-bar-item w3-button popupSettingsOppugno"><i class="fa fa-cog"></i></a>
+      <a href="#" class="w3-button popupSettingsOppugno" style="margin: 0 auto"><i class="fa fa-cog fa-fw"></i> Paramètres</a>
     </div>
   </div>
   <hr>
@@ -41,14 +39,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <h5>Dashboard</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Overview</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding popupWeatherOppugno"><i class="fa fa-bullseye fa-fw"></i>  Météo</a> <!--TODO add link meteociel -->
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Capteurs</a>
     <a href="#systemeControlables" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  Systèmes contrôlables</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding popupWeatherOppugno"><i class="fa fa-bullseye fa-fw"></i>  Weather</a> <!--TODO add link meteociel -->
     <% if (username == 'admin') { %>
       <!-- <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Gestion des comptes</a> -->
-      <a href="/register" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Gestion des comptes</a>
+      <a href="/register" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  Gestion des comptes</a>
     <% } %>
+    <a href="#" class="w3-bar-item w3-button w3-padding popupSettingsOppugno"><i class="fa fa-cog fa-fw"></i>  Paramètres</a>
     <a href="#" class="w3-bar-item w3-button w3-padding boutonDeconnection"><i class="fa fa-remove fa-fw"></i>  Déconnexion</a><br><br>
   </div>
   <!-- <script charset='UTF-8' src='http://www.meteofrance.com/mf3-rpc-portlet/rest/vignettepartenaire/312690/type/VILLE_FRANCE/size/PORTRAIT_VIGNETTE' type='text/javascript'></script> -->
@@ -60,16 +58,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div>
     <div class="popupCloseButton">X</div>
     <header class="w3-container">
-      <h5><b><i class="fa fa-bullseye fa-fw"></i> Weather</b></h5>
+      <h5><b><i class="fa fa-bullseye fa-fw"></i> Météo</b></h5>
     </header>
     <div>
       <form action="weather" method="post" target="_blank">
         <fieldset>
-          <legend class="popupTitleContent">Requiered information :</legend>
+          <legend class="popupTitleContent">Localisation :</legend>
           <br />
           <div class="popupContent">
             <div class="popupTextContent">
-            ZipCode or City :
+            Ville ou CP :
             </div>
             <div class="popupInput">
             <input type="text" name="location" class="popupInputContent" value=""> <br />
@@ -101,16 +99,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div>
     <div class="popupCloseButton">X</div>
     <header>
-      <h5><b><i class="fa fa-cog fa-fw"></i> Settings</b></h5>
+      <h5><b><i class="fa fa-cog fa-fw"></i> Paramètres</b></h5>
     </header>
     <div>
       <form action="settings" method="post">
         <fieldset>
-          <legend class="popupTitleContent">Personal information :</legend>
+          <legend class="popupTitleContent">Nouvelles Informations :</legend>
           <br />
           <div class="popupContent">
             <div class="popupTextContent">
-              Pseudonym :
+              Identifiant :
             </div>
             <div class="popupInput">
             <input type="text" name="pseudo" class="popupInputContent" value="">
@@ -118,10 +116,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           </div>
           <div class="popupContent" id="lastContent">
             <div class="popupTextContent">
-              Email :
+              Mot de Passe :
             </div>
             <div class="popupInput">
-            <input type="text" name="email" class="popupInputContent" value=""> <br />
+            <input type="text" name="mdp" class="popupInputContent" value=""> <br />
             </div>
           </div>
           <br />
@@ -193,7 +191,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             </div>
           </div>
           <div class="submitSelector">
-            <div class="submitButton" id="submitButtonTemperature">submit</div>
+            <div class="submitButton" id="submitButtonTemperature">soumettre</div>
           </div>
           <img class="image" id="image1" alt="Graphe en cours de chargement..."
           src="http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&panelId=6&from=now-24h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
@@ -253,7 +251,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             </div>
           </div>
           <div class="submitSelector">
-            <div class="submitButton" id="submitButtonHumidity">submit</div>
+            <div class="submitButton" id="submitButtonHumidity">soumettre</div>
           </div>
           <img class="image" id="image2" alt="Graphe en cours de chargement..."
           src="http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&panelId=2&from=now-24h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">
@@ -313,7 +311,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
             </div>
           </div>
           <div class="submitSelector">
-            <div class="submitButton" id="submitButtonLuminosity">submit</div>
+            <div class="submitButton" id="submitButtonLuminosity">soumettre</div>
           </div>
           <img class="image" id="image3" alt="Graphe en cours de chargement..."
           src="http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&panelId=4&from=now-24h&to=now&width=1000&height=500&tz=UTC%2B01%3A00">

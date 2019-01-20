@@ -240,9 +240,12 @@ input:checked + .slider:before {
     width:100%;
   }
   .popupInput {
+    padding-bottom: 2%;
+    text-align: center;
     width: 100%;
   }
   .popupSelect {
+    text-align: center;
     width: 100%;
     padding-bottom: 2%;
   }
@@ -448,5 +451,8 @@ input:checked + .slider:before {
   display: none;
 }
 #details2 {
+  display: none;
+}
+#details3 {
   display: none;
 }

@@ -56,9 +56,9 @@ app.post('/weather', function(req, res) {
 
 app.post('/settings', function(req, res) {
   var pseudo = req.body.pseudo;
-  var mail = req.body.email;
+  var mdp = req.body.mdp;
   console.log("pseudo=" + pseudo);
-  console.log("mail=" + mail);
+  console.log("mot de passe=" + mdp);
   // var json = "{\npseudo:" + pseudo + ",\nmail:" + mail + "\n}"
   // fs.writeFile('test', json, function(err){
   //   if (err){
