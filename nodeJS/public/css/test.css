@@ -207,7 +207,6 @@ input:checked + .slider:before {
   padding-bottom: 2%;
 }
 #controlableSystemHead {
-  display: none;
   font-style: normal;
   width: 75%;
   margin: 0 auto;
