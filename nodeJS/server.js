@@ -25,12 +25,10 @@ app.use(cookieParser());
 var server = http.createServer(app);
 
 /*************************************
-  Mise en place de la connection DB
+  Mise en place des connection BD
 **************************************/
 const influx = new Influx.InfluxDB('http://localhost:8086/CONTROLLABLE_SYSTEMS');
 let sqlite = new sqlite3.Database('database.sqlite')
-
-// bcrypt.hash("ParceQueLesChampignonsCEstBon", 10, function(err, hash) {console.log(hash);});
 
 /****************************************
      Gestion requete POST formulaire
@@ -54,6 +52,7 @@ app.post('/weather', function(req, res) {
   res.end();
 });
 
+//Gestion de la modification des password et login
 app.post('/settings', function(req, res) {
   var pseudo = req.body.pseudo;
   var mdp = req.body.mdp;
@@ -67,7 +66,7 @@ app.post('/settings', function(req, res) {
           sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
         });
         res.clearCookie("token");
-        res.render('login.html', {message: "Identifiants changés avec succès, identifiez-vous avec vous nouveaux identifiants"});
+        res.render('login.html', {message: "Identifiants changés avec succès"});
       }
     })
   } else {
@@ -75,11 +74,13 @@ app.post('/settings', function(req, res) {
   }
 });
 
-function printLog(error, stdout, stderr) {
-  console.log('stdout : ' + stdout);
-  console.log('stderr : ' + stderr);
-}
+// Affichage dans les traces du serveur des logs des processus fils (exec)
+// function printLog(error, stdout, stderr) {
+//   console.log('stdout : ' + stdout);
+//   console.log('stderr : ' + stderr);
+// }
 
+// Active l'irragtion de la station passées en parametres de la requete
 app.post('/startWatering', function(req, res){
   var station = req.body.value;
   // Start the corresponding station
@@ -97,6 +98,7 @@ app.post('/startWatering', function(req, res){
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
+// stop l'irrigation de la station passée en paramètre
 app.post('/stopWatering', function(req, res){
   var station = req.body.value;
   // Stop the corresponding station
@@ -137,12 +139,10 @@ app.post('/stopWatering', function(req, res){
 /****************************************
   Gestion de l'affichage des pages web
 *****************************************/
+
+// demande d'affichage de index.html
+// Si non connecté => page de login
 app.get('/', function(req, res){
-    // influx.getDatabaseNames().then(names => console.log(names))
-    // .catch(error => {console.error(`ERROR : ${err.stack}`)});
-    // influx.query('SELECT * FROM temperature')
-    // .then(result => {console.log(result)})
-    // .catch(error => {console.error(`ERROR : ${err.stack}`)});
     if (req.cookies.token) {
       jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
         if (error) {
@@ -156,6 +156,7 @@ app.get('/', function(req, res){
     }
 });
 
+// Authentification obligatoire
 app.post('/login', function(req, res){
   let username = req.body.login
   let password = req.body.mdp
@@ -180,6 +181,7 @@ app.post('/login', function(req, res){
   }
 });
 
+// page de création de compte pour les admin
 app.get('/register', function(req, res) {
   if (req.cookies.token) {
     jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
@@ -194,6 +196,7 @@ app.get('/register', function(req, res) {
   }
 });
 
+// admin créé un nouveau compte
 app.post('/register', function(req, res) {
   if (req.cookies.token) {
     jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
@@ -226,16 +229,19 @@ app.post('/register', function(req, res) {
   }
 });
 
-var connections = []
+var connections = [] // pool de connections actives
 var controlablesCurrentStates = {};
 var modifiedControlables = [];
 
+// requete "Server Send Event" du package express-sse
 function sseSend(res, data){
   res.write("data: " + JSON.stringify(data) + "\n\n");
 }
 
+// ouverture d'une connection pour l'envoi d'evenement en frontend
 app.get('/stream', function(req, res) {
 
+  // On initialise la valeur 'controlablesCurrentStates'
   influx.query('select id_station,last(value) from watering group by id_station;')
   .then(function(result){
     controlablesCurrentStates = JSON.stringify(result);
@@ -247,11 +253,19 @@ app.get('/stream', function(req, res) {
     sseSend(res, "{'success':1}");
     connections.push(res);
 
+    // On active la sous routine qui verifie si il y a eu un changement d'état
+    // des systèmes contrôlables et génère un evenement en frontend le cas échéant
+    //    Pour déterminer si il y a eu un changement, on compare avec la valeur
+    //    précédente des systèmes à savoir : 'controlablesCurrentStates'
     setInterval(daemon, 5*1000);
   })
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 })
 
+// Verifie si il y a eu un changement d'état des systèmes contrôlables et
+// génère un evenement en frontend le cas échéant.
+//    Pour déterminer si il y a eu un changement, on compare avec la valeur
+//    précédente des systèmes à savoir : 'controlablesCurrentStates'
 function getControlableSystemsState(){
   var updatedValues;
 
@@ -268,6 +282,7 @@ function getControlableSystemsState(){
     controlablesCurrentStates = updatedValues;
     // console.log("now : " + controlablesCurrentStates);
 
+    // Pour tous les systèmes contrôlables on regarde si l'état à changé
     for (let station = 0; station < previous.length; station++){
       // updatedValues.hasOwnProperty(name)
       if (current[station]["last"] != previous[station]["last"]){
@@ -279,6 +294,8 @@ function getControlableSystemsState(){
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 }
 
+// daemon génère évènement si 'getControlableSystemsState' a montré des
+// modifications des états des systèmes contrôlables
 function daemon(){
 
   getControlableSystemsState();
@@ -290,9 +307,10 @@ function daemon(){
     }
   }
 
-  modifiedControlables = [];
+  modifiedControlables = []; // reset variable
 }
 
+// renvoit l'état actuel des systèmes d'irrigation
 app.get('/irrigation', function(req, res){
   influx.query('select id_station,last(value) from watering group by id_station;')
   .then(function(result){
@@ -302,6 +320,7 @@ app.get('/irrigation', function(req, res){
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
+// renvoit le mode actuel du système (manuel:0 ou auto:1)
 app.get('/mode', function(req, res){
   influx.query('select last(value) from mode;')
   .then(function(result){
@@ -312,6 +331,7 @@ app.get('/mode', function(req, res){
   .catch(error => {console.error(`ERROR : ${err.stack}`)});
 });
 
+// modifie en base de données le mode du système (manuel:0 ou auto:1)
 app.post('/changeMode', function(req, res){
   var mode = 0;
   if (req.body.value == '1') {

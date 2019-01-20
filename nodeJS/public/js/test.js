@@ -1,16 +1,14 @@
 // Generate url grafana to get graphics with the given start and end date
 function generateGrafanaUrl(start, end, id_graph){
-  /*
-  http://redtacos.ddns.net:3000/render/d-solo/eAw1TqRRk/
-  test-dashboard?panelId=4&orgId=1&from=now-48h&to=now&width=1000&height=500&tz=UTC%2B01%3A00
-  */
   let url1 = 'http://redtacos.ddns.net:3000/render/d-solo/vJW9MEzRz/all-sensors?orgId=1&';
   let url2 = '&width=1000&height=500&tz=UTC%2B01%3A00';
 
+  // selection des valeur min et max du graphique Grafana
   let from = "from=now-" + start + "h&";
   let to = "to=now-" + end + "h&";
   let panel = "panelId=" + id_graph + "&";
 
+  // final URL
   let url = url1 + panel + from + to + url2;
   return url
 }
@@ -49,6 +47,8 @@ function onGraphSelected(type, ref, id_graph){
 
 var controlablesNumber;
 
+// balise HTML pour l'affichage dynamique des systèmes contrôlables,
+// leur nombre n'étant pas connu à l'avance, ni leur état (actif ou non)
 var line = "<div class='controlableSystems'>";
 var sublineHead = "<div id='controlableSystemHead'>";
 var texte = "Selectionner un mode de fonctionnement";
@@ -62,6 +62,7 @@ var selectMode2 = '>' + '<div class="slider round"></div></label>';
 var close = "</div></div>";
 
 function myControlableSystems() {
+  // Récupère le mode du système (manuel:0 ou auto:1)
   $.get('mode', function(data, status){
     var mode = line + texte + sublineHead + divManuel + manuel + selectMode;
 
@@ -73,6 +74,7 @@ function myControlableSystems() {
     document.getElementById("controlableSystemsArea").innerHTML += mode;
 
     // affiche tous les systèmes controlables et leurs états de fonctionnement
+    // Si le mode est auto, on masque les selecteurs
     printSC();
   });
 }
@@ -81,12 +83,13 @@ function printSC() {
   var sublineEngine = "<div class='controlableSystem'>";
   var system = "<div style='float:left;width:64%;text-align:right;padding-right:4%'>";
 
+  // Récupère le nombre et l'état des systèmes contrôlables
   $.get('irrigation', function(data, status){
     // give last state of each controlable system
     json = JSON.parse(data);
-    controlablesNumber = json.length;
+    controlablesNumber = json.length; // nombre de systèmes contrôlables
 
-    // print each contolable systems selector
+    // display each contolable systems selector
     for (let i=0; i<controlablesNumber; i++){
       var name = "Irrigation sur station " + json[i].id_station;
       var checkbox = '</div><label class="switch"><input id="station' +
@@ -96,6 +99,9 @@ function printSC() {
       document.getElementById("controlableSystemsArea").innerHTML += toPrint;
     }
 
+    // Si le mode est auto, on masque les selecteurs des systèmes contrôlables :
+    // Le daemon à la main sur l'état des systèmes,
+    // les selecteurs sont non fonctionnels
     var display = "inline-block";
     var margin = "72%";
     if (document.getElementById("mode").checked) {
@@ -108,7 +114,7 @@ function printSC() {
       document.getElementById("station" + json[i].id_station).style.display = display;
       document.getElementById("comment" + json[i].id_station).style.marginLeft = margin;
 
-      // if controlable system is on, we put it on in the UI too
+      // if controlable system is on, we show it is on in the UI too
       if (json[i].last == 1) {
         document.getElementById("comment" + json[i].id_station).innerHTML = "Actif";
         document.getElementById("comment" + json[i].id_station).style.color = "green";
@@ -152,7 +158,8 @@ function printSC() {
 }
 
 // Création du listener d'event (en attente d'event du serveur)
-// On peut ainsi actualiser le status des systèmes controlables en "temps réel"
+// On peut ainsi actualiser le status des systèmes controlables en temps réel,
+// le délai de mise à jour est d'environ 5 secondes maximum (défini coté serveur)
 if (!!window.EventSource) {
   var source = new EventSource('/stream');
 
@@ -222,6 +229,7 @@ $( document ).ready(function() {
     $(item).appendTo("#luminosityToHour");
   }
 
+  // Affichage des systèmes contrôlables
   myControlableSystems();
 
   // On effectue une opération quand le select des graphes est modifié
@@ -235,6 +243,7 @@ $( document ).ready(function() {
     onGraphSelected('luminosity', 'image3', '4');
   });
 
+  // display graphique quand utilisateur clique sur la tuile temperature
   var showDetails = false;
   $('.bouttonTemperature').mousedown(function (e) {
     if (showDetails) {
@@ -247,6 +256,7 @@ $( document ).ready(function() {
     }
   });
 
+  // display graphique quand utilisateur clique sur la tuile humidité
   var showDetails2 = false;
   $('.bouttonHumidite').mousedown(function (e) {
     if (showDetails2) {
@@ -259,6 +269,7 @@ $( document ).ready(function() {
     }
   });
 
+  // display graphique quand utilisateur clique sur la tuile luminosité
   var showDetails3 = false;
   $('.bouttonLuminosite').mousedown(function (e) {
     if (showDetails3) {
@@ -271,11 +282,13 @@ $( document ).ready(function() {
     }
   });
 
+  // suppression du cookie et rechargement de la page
   $('.boutonDeconnection').mousedown(function (e) {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     location.reload();
   });
 
+  // Gestion de l'affichage des popUp metéo et settings
   $("#close").click(function(){
     w3_close();
   });
