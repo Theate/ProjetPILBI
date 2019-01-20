@@ -86,7 +86,7 @@
   padding-bottom: 2%;
 }
 .submitButton {
-  width:12%;
+  width:14%;
   padding-top: 0.5%;
   padding-bottom: 0.5%;
   border-radius: 5px;
@@ -95,10 +95,6 @@
   color: black;
   margin: 0 auto;
   text-align: center;
-  text-transform: uppercase;
-}
-.submitButton:hover{
-  /* background-color: rgba(245,245,250,0.95); */
 }
 .submitButton:active{
   background-color: rgba(245,245,250,0.7);
