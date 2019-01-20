@@ -134,7 +134,11 @@
 }
 .systemeControlables {
   padding-top: 4%;
-  font-size: 2vw;
+  font-size: 1.5vw;
+}
+.capteur {
+  padding-top: 2%;
+  font-size: 1.5vw;
 }
 .switch input {
   opacity: 0;
@@ -258,6 +262,9 @@ input:checked + .slider:before {
   }
   .systemeControlables {
     padding-top: 8%;
+  }
+  .capteur {
+    padding-top: 4%;
   }
   .textSelector {
     font-size: 2vw;
