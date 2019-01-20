@@ -169,11 +169,11 @@ app.post('/login', function(req, res){
             res.cookie('token', token)
               .redirect('/');
           } else {
-            res.render('login.html', {message: "Mot de passe incorrect"});
+            res.render('login.html', {message: "Mot de passe ou identifiant incorrect"});
           }
         })
       } else {
-        res.render('login.html', {message: "Il n'existe aucun utilisateur avec ce login"});
+        res.render('login.html', {message: "Mot de passe ou identifiant incorrect"});
       }
     })
   } else {
