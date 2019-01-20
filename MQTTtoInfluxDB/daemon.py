@@ -18,22 +18,59 @@ def on_message(client, userdata, msg):
     # Use utc as timestamp
     receiveTime=datetime.datetime.utcnow()
     message=msg.payload.decode("utf-8")
-    print(message)
+    soilHumidity, airHumidity, airTemp, brightness = message.split("/")
+    logging.debug(airTemp)
     try:
-        # Convert the string to a float so that it is stored as a number and not a string in the database
-        dict = json.loads(message)
+        json_body = [
+                {
+                    "measurement": "soil_moisture",
+                    "tags": {
+                        "id_station": "1",
+                        },
+                    "fields": {
+                        "value": float(soilHumidity)
+                        }
+                    },
+                {
+                    "measurement": "air_humidity",
+                    "tags": {
+                        "id_station": "1",
+                        },
+                    "fields": {
+                        "value": float(airHumidity)
+                        }
+                    },
+                {
+                    "measurement": "temperature",
+                    "tags": {
+                        "id_station": "1",
+                        },
+                    "fields": {
+                        "value": float(airTemp)
+                        }
+                    },
+                {
+                    "measurement": "luminosity",
+                    "tags": {
+                        "id_station": "1",
+                        },
+                    "fields": {
+                        "value": float(brightness)
+                        }
+                    }
+                ]
+        logging.debug(json_body)
+        dbclient.write_points(json_body)
+        logging.debug("Finished writing to InfluxDB")
     except:
-        logging.debug("Could not convert " + message + " to a dictionnary")
-        return
-    logging.debug(dict["data"])
-    logging.debug("Contenu en data: " + dict["data"])
-    logging.debug("Finished writing to InfluxDB")
-        
+        logging.error("Database writing failed for message: {}".format(message))
+
 # Set up a client for InfluxDB
-logging.debug("Création du client InfluxDB")
-DATABASE = "TEST"
-dbclient = InfluxDBClient('127.0.0.1', '8086', 'root', 'root', 'SENSOR_DATA')
-dbclient.switch_database(DATABASE)
+try:
+    dbclient = InfluxDBClient('127.0.0.1', '8086', 'root', 'root', 'SENSOR_DATA')
+    logging.debug("Connection to InfluxDB is a success")
+except:
+    logging.error("Connection to InfluxDB failed")
 # Initialize the MQTT client that should connect to the Mosquitto broker
 client = mqtt.Client()
 client.on_connect = on_connect

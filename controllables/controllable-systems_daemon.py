@@ -113,7 +113,7 @@ class ActivateWatering(AbstractActivationRule):
             return True
         if last_temperature is None:
             return False
-        if last_soil_moisture < 70 and last_temperature < 245:
+        if last_soil_moisture < 100 and last_temperature < 25:
             # Le sol est un peu sec et il fait frais
             return True
         return False
@@ -128,7 +128,7 @@ class DesactivateWatering(AbstractDesactivationRule):
         last_soil_moisture = db_connexion.get_last_measurement_value("soil_moisture", self.id_station)
         if last_soil_moisture is None:
             return True
-        if last_soil_moisture > 80:
+        if last_soil_moisture > 150:
             return True
         return False
 

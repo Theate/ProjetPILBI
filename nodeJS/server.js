@@ -27,7 +27,7 @@ var server = http.createServer(app);
 /*************************************
   Mise en place de la connection DB
 **************************************/
-const influx = new Influx.InfluxDB('http://redtacos.ddns.net:8086/CONTROLLABLE_SYSTEMS');
+const influx = new Influx.InfluxDB('http://localhost:8086/CONTROLLABLE_SYSTEMS');
 let sqlite = new sqlite3.Database('database.sqlite')
 
 // bcrypt.hash("ParceQueLesChampignonsCEstBon", 10, function(err, hash) {console.log(hash);});
