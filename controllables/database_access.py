@@ -52,3 +52,10 @@ class DBConnexion:
         for mypoint in result_set.get_points():
             if mypoint['id_station'] == id_station:
                 return mypoint['last']
+
+    def get_mode(self):
+        self.client.switch_database('CONTROLLABLE_SYSTEMS')
+        myquery = "SELECT last(value) FROM mode"
+        result_set = self.client.query(myquery)
+        for mypoint in result_set.get_points():
+            return mypoint['last']

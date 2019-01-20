@@ -78,6 +78,8 @@ class AbstractActivationRule(AbstractRule):
         self.id_station = id_station
 
     def apply(self, db_connexion):
+        if db_connexion.get_mode() == 0:
+            return
         if db_connexion.is_freeze() != 0:
             return
         if db_connexion.get_state(self.controllable_system, self.id_station) != 1:
@@ -93,6 +95,8 @@ class AbstractDesactivationRule(AbstractRule):
         self.id_station = id_station
 
     def apply(self, db_connexion):
+        if db_connexion.get_mode() == 0:
+            return
         if db_connexion.get_state(self.controllable_system, self.id_station) != 0:
             db_connexion.change_controllable_state(self.controllable_system, self.id_station, 0)
 
