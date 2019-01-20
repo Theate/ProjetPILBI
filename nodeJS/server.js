@@ -57,16 +57,22 @@ app.post('/weather', function(req, res) {
 app.post('/settings', function(req, res) {
   var pseudo = req.body.pseudo;
   var mdp = req.body.mdp;
-  console.log("pseudo=" + pseudo);
-  console.log("mot de passe=" + mdp);
-  // var json = "{\npseudo:" + pseudo + ",\nmail:" + mail + "\n}"
-  // fs.writeFile('test', json, function(err){
-  //   if (err){
-  //     throw err;
-  //   }
-  // });
-  res.redirect('back');
-  res.end();
+  if (req.cookies.token) {
+    jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
+      if (error) {
+        res.redirect('/').end();
+      } else {
+        var original = authorizedData.username;
+        bcrypt.hash(mdp, 10, function(err, hash) {
+          sqlite.run("UPDATE \"users\" SET \"username\" = ?, \"password\" = ? WHERE \"username\" = ?", [pseudo, hash, original]);
+        });
+        res.clearCookie("token");
+        res.render('login.html', {message: "Identifiants changés avec succès, identifiez-vous avec vous nouveaux identifiants"});
+      }
+    })
+  } else {
+    res.redirect('/').end();
+  }
 });
 
 function printLog(error, stdout, stderr) {
@@ -142,7 +148,7 @@ app.get('/', function(req, res){
         if (error) {
           res.render('login.html', {message: "Erreur d'authentification"});
         } else {
-          res.render('index.html', {username: authorizedData.username});
+          res.render('index.html', {username: authorizedData.username, isAdmin: authorizedData.isAdmin});
         }
       })
     } else {
@@ -154,13 +160,11 @@ app.post('/login', function(req, res){
   let username = req.body.login
   let password = req.body.mdp
   if (username && password) {
-    let foundUsername = false;
-    let correctPassword = false;
     sqlite.get("SELECT * FROM users WHERE username == ?", [username], (error, row) => {
       if (row) {
         bcrypt.compare(password, row.password, function(err, compareResult) {
           if (compareResult) {
-            let token = jwt.sign({username: username}, secret);
+            let token = jwt.sign({username: username, isAdmin: row.is_admin}, secret);
             res.cookie('token', token)
               .redirect('/');
           } else {
@@ -179,7 +183,7 @@ app.post('/login', function(req, res){
 app.get('/register', function(req, res) {
   if (req.cookies.token) {
     jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
-      if (error || authorizedData.username != "admin") {
+      if (error || !authorizedData.isAdmin) {
         res.redirect('/');
       } else {
         res.render('register.html', {message: 'Remplissez les champs pour ajouter un compte'});
@@ -193,12 +197,13 @@ app.get('/register', function(req, res) {
 app.post('/register', function(req, res) {
   if (req.cookies.token) {
     jwt.verify(req.cookies.token, secret, (error, authorizedData) => {
-      if (error || authorizedData.username != "admin") {
+      if (error || !authorizedData.isAdmin) {
         res.redirect('/');
       } else {
         let username = req.body.login
         let password = req.body.mdp
         let passwordConf = req.body.mdpconf
+        let isAdmin = req.body.isAdmin == "true"
         if (password != passwordConf) {
           res.render('register.html', {message: 'Erreur: les deux mots de passe ne correspondent pas'});
         } else {
@@ -207,7 +212,7 @@ app.post('/register', function(req, res) {
               res.render('register.html', {message: 'Erreur: il existe déjà un compte avec ce login'});
             } else {
               bcrypt.hash(password, 10, function(err, hash) {
-                sqlite.run("INSERT INTO \"users\" (\"username\", \"password\") VALUES (?, ?)", [username, hash], (error) => {
+                sqlite.run("INSERT INTO \"users\" (\"username\", \"password\", \"is_admin\") VALUES (?, ?, ?)", [username, hash, isAdmin], (error) => {
                   res.render('register.html', {message: 'Compte créé avec succès'});
                 })
               });
